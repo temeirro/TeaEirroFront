@@ -13,29 +13,19 @@ import './satoshi.css';
 if(localStorage.token) {
     const user = jwtDecode(localStorage.token) as IUser;
     const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
-    if (user?.email == 'art.rozhyk@gmail.com') {
-        store.dispatch({
-            type: AuthReducerActionType.LOGIN_ADMIN,
-            payload: {
-                email: user.email,
-                image: imagename.data.image_name,
-                name: user.name,
-                lastName: user.lastName
-            } as IUser
-        });
-    }
-    else
-    {
-        store.dispatch({
-            type: AuthReducerActionType.LOGIN_USER,
-            payload: {
-                email: user.email,
-                image: imagename.data.image_name,
-                name: user.name,
-                lastName: user.lastName
-            } as IUser
-        });
-    }
+
+    store.dispatch({
+        type: AuthReducerActionType.LOGIN_USER,
+        payload: {
+            email: user.email,
+            image: imagename.data.image_name,
+            name: user.name,
+            lastName: user.lastName,
+            role: user.role,
+        } as IUser
+    });
+
+
 
 }
 

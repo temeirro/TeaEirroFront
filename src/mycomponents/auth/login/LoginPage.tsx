@@ -40,29 +40,22 @@ const LoginPage = () => {
                     email: user.email,
                     image: imagename.data.image_name,
                     name: user.name,
-                    lastName: user.lastName
+                    lastName: user.lastName,
+                    role: user.role,
                 } as IUser
             });
 
             console.log("User auth", user);
-            if(user.email == 'art.rozhyk@gmail.com')
-            {
-                dispatch({
-                    type: AuthReducerActionType.LOGIN_ADMIN,
-                    payload: {
-                        email: user.email,
-                        image: imagename.data.image_name,
-                        name: user.name,
-                        lastName: user.lastName
-                    } as IUser
-                });
 
+            if(user.role == 'admin')
+            {
                 navigate("/admin");
             }
             else
             {
                 navigate("/");
             }
+
         }
         catch (ex) {
             console.error('Помилка при реєстрації!');

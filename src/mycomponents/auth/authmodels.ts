@@ -19,6 +19,7 @@ export interface IRegister {
     email: string;
     password: string;
     phone:string;
+    role:string;
 }
 
 export interface ILoginResult {
@@ -45,6 +46,7 @@ export interface IUser {
     image: string,
     name: string,
     lastName: string,
+    role: string,
 }
 
 export interface IImage {

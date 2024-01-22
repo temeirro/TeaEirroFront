@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/24/outline'
 const DropdownUser = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const {isAdmin, user} = useSelector((redux: any)=>redux.auth as IAuthReducerState)
+    const {user} = useSelector((redux: any)=>redux.auth as IAuthReducerState)
 
     const trigger = useRef<any>(null);
     const dropdown = useRef<any>(null);
@@ -90,9 +90,8 @@ const DropdownUser = () => {
                 ref={dropdown}
                 onFocus={() => setDropdownOpen(true)}
                 onBlur={() => setDropdownOpen(false)}
-                className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
-                    dropdownOpen === true ? 'block' : 'hidden'
-                }`}
+                className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${dropdownOpen ? 'block' : 'hidden'} z-50`}
+
             >
                 <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
                     <li >
@@ -146,7 +145,7 @@ const DropdownUser = () => {
                             Налаштування
                         </Link>
                     </li>
-                    {isAdmin && (
+                    {user?.role == 'admin' && (
                         <li>
                             <Link
                                 to="/admin"

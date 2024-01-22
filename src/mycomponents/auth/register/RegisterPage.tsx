@@ -43,7 +43,7 @@ const RegisterPage = () => {
     };
 
     const onFinish = async (values: IRegisterForm) => {
-        const data: IRegister = { ...values, image: values.image?.thumbUrl };
+        const data: IRegister = { ...values, role: 'user', image: values.image?.thumbUrl };
         console.log("Registration data", data);
 
         try {
