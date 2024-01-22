@@ -1,0 +1,16 @@
+.customer {
+    display: flex;
+    justify-content: center;
+}
+
+#createCustomer {
+    width: 75%;
+}
+
+.ant-divider-horizontal.ant-divider-with-text-center::before,
+.ant-divider-horizontal.ant-divider-with-text-center::after
+{
+    border-top: 1px solid #6185e3;
+    color:black;
+}
+
