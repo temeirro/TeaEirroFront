@@ -6,6 +6,7 @@ import HomePage from "./mycomponents/home/HomePage.tsx";
 import LoginPage from "./mycomponents/auth/login/LoginPage.tsx";
 import RegisterPage from "./mycomponents/auth/register/RegisterPage.tsx";
 import AdminPage from "./mycomponents/admin/AdminPage.tsx";
+import NotFound from "./mycomponents/containers/NotFound.tsx";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="login" element={<LoginPage/>}/>
             <Route path="register" element={<RegisterPage/>}/>
             <Route path="admin" element={<AdminPage/>}/>
+            <Route path="*" element={<NotFound/>}/>
 
         </Routes>
 
