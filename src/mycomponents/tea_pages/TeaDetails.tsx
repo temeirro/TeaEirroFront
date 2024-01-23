@@ -30,8 +30,7 @@ const product = {
     price: '$192',
     href: '#',
     breadcrumbs: [
-        { id: 1, name: 'Tea', href: '#' },
-        { id: 2, name: 'Black', href: '#' },
+        { id: 1, name: 'Tea', href: '/' },
     ],
     images: [
         {
@@ -105,7 +104,9 @@ export default function Example() {
 
 
     return (
+
         <div className="bg-white">
+
             <div className="pt-6">
                 <nav aria-label="Breadcrumb">
                     <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -128,6 +129,7 @@ export default function Example() {
                                 </div>
                             </li>
                         ))}
+
                         <li className="text-sm">
                             <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
                                 {tea?.name}
@@ -145,8 +147,16 @@ export default function Example() {
                                 alt={image?.alt}
                                 className="h-full w-full object-cover object-center"
                             />
+
                         </div>
                     ))}
+
+
+                    <img
+                        src={`http://teaeirro.com/upload/${tea?.tea_type?.name}.jpg`}
+                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                    />
+
                 </div>
 
 
@@ -207,6 +217,7 @@ export default function Example() {
                                 <p className="text-base text-gray-900">{tea?.description}</p>
                             </div>
                         </div>
+                        <div className={'flex gap-40'}>
 
                         <div className="mt-10">
                             <h3 className="text-sm font-medium text-gray-900">Ingredients</h3>
@@ -225,10 +236,17 @@ export default function Example() {
                         <div className="mt-10">
                             <h2 className="text-sm font-medium text-gray-900">Origin</h2>
 
-                            <div className="mt-4 space-y-6">
+                            <div className="mt-4 space-y-6 flex gap-16">
                                 <p className="text-sm text-gray-600">{tea?.tea_origin.name}</p>
+                                <img
+                                    src={`http://teaeirro.com/upload/${tea?.tea_origin.name}.svg`}
+                                    alt={tea?.tea_origin.name}
+                                    className="w-36"
+                                />
                             </div>
                         </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

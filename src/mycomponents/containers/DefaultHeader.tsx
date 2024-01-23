@@ -13,14 +13,14 @@ import {useNavigate} from "react-router-dom";
 import DropdownUser from "../tailwind/DropdownUser.tsx";
 
 const products = [
-    { name: 'Чорний', description: 'Почни з класики', href: '/Black', icon: HeartIcon },
-    { name: 'Зелений', description: 'Багато антиоксидантів', href: '/Green', icon: HeartIcon },
-    { name: 'Жовтий', description: 'Сонячний відтінок щастя', href: '/Yellow', icon: HeartIcon },
-    { name: 'Улун', description: 'Несамовитий баланс жовтого та червоного', href: '/Oolong', icon: HeartIcon },
-    { name: 'Білий', description: 'Мінімум обробки', href: '/White', icon: HeartIcon },
-    { name: 'Пуер', description: 'Джерело почуттів', href: '/Puerh', icon: HeartIcon },
-    { name: 'Матча', description: 'Зелений тренд', href: '/Matcha', icon: HeartIcon },
-    { name: 'Всі', description: 'Без обмежень', href: '/All', icon: HeartIcon },
+    { name: 'Чорний', description: 'Почни з класики', href: '/tea/Black', icon: HeartIcon },
+    { name: 'Зелений', description: 'Багато антиоксидантів', href: '/tea/Green', icon: HeartIcon },
+    { name: 'Жовтий', description: 'Сонячний відтінок щастя', href: '/tea/Yellow', icon: HeartIcon },
+    { name: 'Улун', description: 'Несамовитий баланс жовтого та червоного', href: '/tea/Oolong', icon: HeartIcon },
+    { name: 'Білий', description: 'Мінімум обробки', href: '/tea/White', icon: HeartIcon },
+    { name: 'Пуер', description: 'Джерело почуттів', href: '/tea/Puerh', icon: HeartIcon },
+    { name: 'Матча', description: 'Зелений тренд', href: '/tea/Matcha', icon: HeartIcon },
+    { name: 'Всі', description: 'Без обмежень', href: '/tea/All', icon: HeartIcon },
 ]
 const callsToAction = [
     { name: 'смакуй культуру елітно', href: '#', icon: PlayCircleIcon },

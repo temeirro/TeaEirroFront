@@ -66,6 +66,7 @@ export default function Example() {
                                     alt={product.name}
                                     className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                 />
+
                             </div>
                             <div className="mt-4 flex justify-between">
                                 <div>
