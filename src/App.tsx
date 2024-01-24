@@ -24,7 +24,7 @@ function App() {
             <Route path="*" element={<NotFound/>}/>
 
             <Route path="tea/:type" element={<TeaPage />} />
-            <Route path="tea/:Id" element={<TeaDetails/>}/>
+            <Route path="tea/details/:Id" element={<TeaDetails/>}/>
 
         </Routes>
 

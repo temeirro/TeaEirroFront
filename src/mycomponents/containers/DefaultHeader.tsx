@@ -12,18 +12,21 @@ import {AuthReducerActionType, IAuthReducerState} from "../auth/login/AuthReduce
 import {useNavigate} from "react-router-dom";
 import DropdownUser from "../tailwind/DropdownUser.tsx";
 
+const colors = ['bg-gray-100', 'bg-green-100', 'bg-yellow-100', 'bg-blue-100', 'bg-white', 'bg-red-100', 'bg-green-100', 'bg-gray-200'];
+
 const products = [
-    { name: 'Чорний', description: 'Почни з класики', href: '/tea/Black', icon: HeartIcon },
-    { name: 'Зелений', description: 'Багато антиоксидантів', href: '/tea/Green', icon: HeartIcon },
-    { name: 'Жовтий', description: 'Сонячний відтінок щастя', href: '/tea/Yellow', icon: HeartIcon },
-    { name: 'Улун', description: 'Несамовитий баланс жовтого та червоного', href: '/tea/Oolong', icon: HeartIcon },
-    { name: 'Білий', description: 'Мінімум обробки', href: '/tea/White', icon: HeartIcon },
-    { name: 'Пуер', description: 'Джерело почуттів', href: '/tea/Puerh', icon: HeartIcon },
-    { name: 'Матча', description: 'Зелений тренд', href: '/tea/Matcha', icon: HeartIcon },
-    { name: 'Всі', description: 'Без обмежень', href: '/tea/All', icon: HeartIcon },
-]
+    { name: 'Black', description: 'Start with the classics', href: '/tea/Black', icon: HeartIcon },
+    { name: 'Green', description: 'Rich in antioxidants', href: '/tea/Green', icon: HeartIcon },
+    { name: 'Yellow', description: 'Sunny shade of happiness', href: '/tea/Yellow', icon: HeartIcon },
+    { name: 'Oolong', description: 'Unbeatable balance of yellow and red', href: '/tea/Oolong', icon: HeartIcon },
+    { name: 'White', description: 'Minimal processing', href: '/tea/White', icon: HeartIcon },
+    { name: 'Puerh', description: 'Source of feelings', href: '/tea/Puerh', icon: HeartIcon },
+    { name: 'Matcha', description: 'Green trend', href: '/tea/Matcha', icon: HeartIcon },
+    { name: 'All', description: 'No limitations', href: '/tea/All', icon: HeartIcon },
+];
+
 const callsToAction = [
-    { name: 'смакуй культуру елітно', href: '#', icon: PlayCircleIcon },
+    { name: 'savor the elite culture', href: '#', icon: PlayCircleIcon }
 
 ]
 
@@ -59,7 +62,7 @@ export default function Example() {
                 <Popover.Group className="hidden lg:flex lg:gap-x-12">
                     <Popover className="relative">
                         <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                            Чай
+                            Tea
                             <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                         </Popover.Button>
 
@@ -74,10 +77,12 @@ export default function Example() {
                         >
                             <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                                 <div className="p-4">
-                                    {products.map((item) => (
+                                    {products.map((item, index) => (
                                         <div
                                             key={item.name}
-                                            className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                            className={`group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 
+                    hover:bg-gray-50 ${colors[index % colors.length]}`}
+                                            style={{ marginBottom: index === products.length - 1 ? 0 : '10px' }}
                                         >
                                             <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                                                 <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
@@ -91,6 +96,9 @@ export default function Example() {
                                             </div>
                                         </div>
                                     ))}
+
+
+
                                 </div>
                                 <div className="grid  divide-x divide-gray-900/5 bg-gray-50">
                                     {callsToAction.map((item) => (
@@ -108,16 +116,16 @@ export default function Example() {
                     </Popover>
 
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Культура
+                        Culture
                     </a>
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Наша філософія
+                        Our Philosophy
                     </a>
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Відгуки
+                        Reviews
                     </a>
                     <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Контакти
+                        Contacts
                     </a>
                 </Popover.Group>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -133,10 +141,10 @@ export default function Example() {
                         // If not authenticated, show Login
                         <div className="gap-5 hidden lg:flex lg:flex-1 lg:justify-end">
                             <a href="/register" className="text-sm font-semibold leading-6 text-gray-900">
-                                Реєстрація <span aria-hidden="true"></span>
+                                Sign Up <span aria-hidden="true"></span>
                             </a>
                         <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
-                            Вхід <span aria-hidden="true">&rarr;</span>
+                            Log In <span aria-hidden="true">&rarr;</span>
                         </a>
 
 
@@ -153,7 +161,7 @@ export default function Example() {
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                src="../../../public/icon.png"
                                 alt=""
                             />
                         </a>
@@ -173,19 +181,21 @@ export default function Example() {
                                     {({ open }) => (
                                         <>
                                             <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                                                Product
+                                                Tea
                                                 <ChevronDownIcon
                                                     className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
                                                     aria-hidden="true"
                                                 />
                                             </Disclosure.Button>
                                             <Disclosure.Panel className="mt-2 space-y-2">
-                                                {[...products, ...callsToAction].map((item) => (
+                                                {products.map((item, index) => (
                                                     <Disclosure.Button
                                                         key={item.name}
                                                         as="a"
                                                         href={item.href}
-                                                        className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                                        className={`block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 
+                    ${colors[index % colors.length]} 
+                    text-gray-900 hover:bg-gray-300`}
                                                     >
                                                         {item.name}
                                                     </Disclosure.Button>
@@ -198,27 +208,33 @@ export default function Example() {
                                     href="#"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
-                                    Features
+                                    Culture
                                 </a>
                                 <a
                                     href="#"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
-                                    Marketplace
+                                    Our Philosophy
                                 </a>
                                 <a
                                     href="#"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
-                                    Company
+                                    Reviews
+                                </a>
+                                <a
+                                    href="#"
+                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                >
+                                    Contacts
                                 </a>
                             </div>
                             <div className="py-6">
                                 <a
-                                    href="#"
+                                    href="/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
-                                    Log in
+                                    Log In
                                 </a>
                             </div>
                         </div>

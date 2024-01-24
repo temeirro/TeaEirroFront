@@ -116,7 +116,7 @@ const DropdownUser = () => {
                                     fill=""
                                 />
                             </svg>
-                            Мій профіль
+                            My Profile
                         </Link>
                     </li>
 
@@ -142,7 +142,7 @@ const DropdownUser = () => {
                                     fill=""
                                 />
                             </svg>
-                            Налаштування
+                            Settings
                         </Link>
                     </li>
                     {user?.role == 'admin' && (
@@ -153,7 +153,7 @@ const DropdownUser = () => {
                             >
                                 <ChartBarIcon className="h-6 w-6 flex-none " aria-hidden="true" />
 
-                                Адмін-панель
+                                Admin-Panel
                             </Link>
                         </li>
                     )}
@@ -177,7 +177,7 @@ const DropdownUser = () => {
                             fill=""
                         />
                     </svg>
-                    Вихід
+                    Exit
                 </button>
             </div>
             {/* <!-- Dropdown End --> */}

@@ -1,23 +1,21 @@
-import {useState} from "react";
-
-import { PlusOutlined } from '@ant-design/icons';
-import {Button, Col, Divider, Form, Input, message, Modal, Row, Upload} from 'antd';
-import type { RcFile, UploadProps } from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
+import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Col, Divider, Form, Input, message, Modal, Row, Upload } from "antd";
+import type { UploadProps } from "antd/es/upload";
+import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
-import {IRegisterForm, IRegister, IUserLoginInfo, IUser} from "../authmodels.ts";
-import {jwtDecode} from "jwt-decode";
-import {imageConverter} from "./imageconvert.ts";
-import {useNavigate} from "react-router-dom";
-import {AuthReducerActionType} from "../login/AuthReducer.ts";
-import {useDispatch} from "react-redux";
-
+import { IRegisterForm, IRegister, IUserLoginInfo, IUser } from "../authmodels.ts";
+import { jwtDecode } from "jwt-decode";
+import { imageConverter } from "./imageconvert.ts";
+import { useNavigate } from "react-router-dom";
+import { AuthReducerActionType } from "../login/AuthReducer.ts";
+import { useDispatch } from "react-redux";
 
 const RegisterPage = () => {
     const navigator = useNavigate();
     const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
+    const [previewImage, setPreviewImage] = useState("");
+    const [previewTitle, setPreviewTitle] = useState("");
     const [file, setFile] = useState<UploadFile | null>();
     const [form] = Form.useForm<IRegisterForm>();
     const dispatch = useDispatch();
@@ -26,24 +24,25 @@ const RegisterPage = () => {
     const handleCancel = () => setPreviewOpen(false);
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
-            file.preview = URL.createObjectURL(file.originFileObj as RcFile);
+            file.preview = URL.createObjectURL(file.originFileObj as File);
         }
 
         setPreviewImage(file.url || (file.preview as string));
         setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
+        setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1));
     };
 
-    const handleChange: UploadProps['onChange'] = ({fileList: newFile}) => {
+    const handleChange: UploadProps["onChange"] = ({ fileList: newFile }) => {
         const newFileList = newFile.slice(-1);
         setFile(newFileList[0]);
     };
+
     const onReset = () => {
         onClear();
     };
 
     const onFinish = async (values: IRegisterForm) => {
-        const data: IRegister = { ...values, role: 'user', image: values.image?.thumbUrl };
+        const data: IRegister = { ...values, role: "user", image: values.image?.thumbUrl };
         console.log("Registration data", data);
 
         try {
@@ -53,7 +52,7 @@ const RegisterPage = () => {
             // Login user
             const loginData = {
                 email: values.email, // Assuming email is a field in your IRegisterForm interface
-                password: values.password // Assuming password is a field in your IRegisterForm interface
+                password: values.password, // Assuming password is a field in your IRegisterForm interface
             };
 
             const login = await axios.post("http://teaeirro.com/api/login", loginData);
@@ -72,132 +71,126 @@ const RegisterPage = () => {
                     email: user.email,
                     image: imagename.data.image_name,
                     name: user.name,
-                    lastName: user.lastName
-                } as IUser
+                    lastName: user.lastName,
+                } as IUser,
             });
 
             success();
             onClear();
-            // Assuming navigator is a function that navigates to a specific route
 
-            if(user.email == 'art.rozhyk@gmail.com')
-            {
+            if (user.email === "art.rozhyk@gmail.com") {
                 dispatch({
                     type: AuthReducerActionType.LOGIN_ADMIN,
                     payload: {
                         email: user.email,
                         image: imagename.data.image_name,
                         name: user.name,
-                        lastName: user.lastName
-                    } as IUser
+                        lastName: user.lastName,
+                    } as IUser,
                 });
 
                 navigator("/admin");
-            }
-            else
-            {
+            } else {
                 navigator("/");
             }
-        } catch {
+        } catch (error) {
             console.error("Registration failed", error);
             error();
         }
     };
 
-    const onClear = ()=>{
+    const onClear = () => {
         form.resetFields();
-        setFile(null)
-    }
+        setFile(null);
+    };
+
     const onCancel = () => {
-        navigator('/');
-    }
+        navigator("/");
+    };
+
     const success = () => {
         messageApi.open({
-            type: 'success',
+            type: "success",
             duration: 10,
-            content: 'Successful registration!',
+            content: "Successful registration!",
         });
     };
 
     const error = () => {
         messageApi.open({
-            type: 'error',
+            type: "error",
             duration: 10,
-            content: 'Registration error!',
+            content: "Registration error!",
         });
     };
 
     return (
-        <Row className="mt-5" justify="center" style={{height: '70vh'}}>
-            <Col span={8} style={{
-                textAlign: 'center',
-                padding: '24px',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                backgroundColor: "white"
-            }}>
+        <Row className="mt-5" justify="center">
+            <Col
+                span={24}
+                md={16}
+                lg={12}
+                xl={8}
+                className="text-center p-8 rounded shadow bg-white"
+            >
                 {contextHolder}
                 <Divider>Registration</Divider>
                 <Form
                     form={form}
                     onFinish={onFinish}
                     layout="vertical"
-                    style={{minWidth: '100%', display: 'flex', flexDirection: "column", justifyContent: "center", padding:20}}
+                    style={{ minWidth: "100%", padding: 20 }}
                 >
                     <Form.Item
-                        label="Ім`я"
+                        label="Name"
                         name="name"
-                        htmlFor="name"
                         rules={[
-                            {required: true, message: 'Enter your name!'},
-                            {min: 2, message: 'Name length is minimum 2 symbols!'}
+                            { required: true, message: "Enter your name!" },
+                            { min: 2, message: "Name length is minimum 2 symbols!" },
                         ]}
                     >
-                        <Input autoComplete="firstName"/>
+                        <Input autoComplete="firstName" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Прізвище"
+                        label="Surname"
                         name="lastName"
-                        htmlFor="lastName"
                         rules={[
-                            {required: true, message: 'Enter your last name!'},
-                            {min: 2, message: 'Last name length is minimum 2 symbols!'}
+                            { required: true, message: "Enter your last name!" },
+                            { min: 2, message: "Last name length is minimum 2 symbols!" },
                         ]}
                     >
-                        <Input autoComplete="lastName"/>
+                        <Input autoComplete="lastName" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Телефон"
+                        label="Phone"
                         name="phone"
-                        htmlFor="phone"
                         rules={[
-                            {required: true, message: 'Enter your phone!'},
-                            {min: 10, message: 'Phone length is minimum 10 symbols!'}
+                            { required: true, message: "Enter your phone!" },
+                            { min: 10, message: "Phone length is minimum 10 symbols!" },
                         ]}
                     >
-                        <Input autoComplete="phone"/>
+                        <Input autoComplete="phone" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Пошта"
+                        label="Email"
                         name="email"
-                        htmlFor="email"
                         rules={[
                             {
-                                type: 'email',
-                                message: 'Email format is wrong!',
+                                type: "email",
+                                message: "Email format is wrong!",
                             },
-                            {required: true, message: 'Enter your email!'},
-                            {min: 5, message: 'Email length is minimum 5 symbols!'}
+                            { required: true, message: "Enter your email!" },
+                            { min: 5, message: "Email length is minimum 5 symbols!" },
                         ]}
                     >
                         <Input autoComplete="email" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Світлина"
+                        label="Your Photo"
                         name={"image"}
                         getValueFromEvent={imageConverter}
                     >
@@ -209,72 +202,77 @@ const RegisterPage = () => {
                             onPreview={handlePreview}
                             accept="image/*"
                         >
-                            {file ? null :
-                                (
-                                    <div>
-                                        <PlusOutlined/>
-                                        <div style={{marginTop: 8}}>обрати</div>
-                                    </div>)
-                            }
+                            {file ? null : (
+                                <div>
+                                    <PlusOutlined />
+                                    <div style={{ marginTop: 8 }}>choose</div>
+                                </div>
+                            )}
                         </Upload>
                     </Form.Item>
 
                     <Form.Item
                         name="password"
-                        label="Пароль"
+                        label="Password"
                         rules={[
-                            { required: true, message: 'Enter your password!', },
-                            { min: 6, message: 'Password length is minimum 6 symbols!', },
+                            { required: true, message: "Enter your password!" },
+                            { min: 6, message: "Password length is minimum 6 symbols!" },
                         ]}
                         hasFeedback
                     >
-                        <Input.Password/>
+                        <Input.Password />
                     </Form.Item>
 
                     <Form.Item
                         name="confirm"
-                        label="Ще раз"
-                        dependencies={['password']}
+                        label="Confirm"
+                        dependencies={["password"]}
                         hasFeedback
                         rules={[
                             {
                                 required: true,
-                                message: 'Please, confirm your password!',
+                                message: "Please, confirm your password!",
                             },
-                            ({getFieldValue}) => ({
+                            ({ getFieldValue }) => ({
                                 validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
+                                    if (!value || getFieldValue("password") === value) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('Passwords not match!'));
+                                    return Promise.reject(new Error("Passwords do not match!"));
                                 },
                             }),
                         ]}
                     >
-                        <Input.Password/>
+                        <Input.Password />
                     </Form.Item>
 
-
-                    <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                        <img alt="example" style={{width: '100%'}} src={previewImage}/>
+                    <Modal
+                        visible={previewOpen}
+                        title={previewTitle}
+                        footer={null}
+                        onCancel={handleCancel}
+                    >
+                        <img alt="example" style={{ width: "100%" }} src={previewImage} />
                     </Modal>
 
-                    <Row style={{display: 'flex', justifyContent: 'center'}}>
-                        <Button className='bg-blue-300' style={{margin:10}}  htmlType="submit">
-                            Закінчити
+                    <div className="flex justify-center space-x-4 mt-4">
+                        <Button
+                            className="bg-blue-300"
+                            htmlType="submit"
+                        >
+                            Finish
                         </Button>
-                        <Button  style={{margin:10}}  htmlType="button" onClick={onReset}>
-                            Очистити
+                        <Button htmlType="button" onClick={onReset}>
+                            Clear
                         </Button>
-                        <Button className='bg-blue-200' style={{margin:10}}  htmlType="button" onClick={onCancel}>
-                            Відмінити
+                        <Button className="bg-blue-200" htmlType="button" onClick={onCancel}>
+                            Cancel
                         </Button>
-                    </Row>
+                    </div>
                 </Form>
             </Col>
-
         </Row>
-    )
-}
+    );
+};
 
-export default  RegisterPage;
+export default RegisterPage;
