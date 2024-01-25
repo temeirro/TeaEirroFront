@@ -1,33 +1,48 @@
-import CardFour from '../../components/CardFour.tsx';
-import CardOne from '../../components/CardOne.tsx';
-import CardThree from '../../components/CardThree.tsx';
-import CardTwo from '../../components/CardTwo.tsx';
-import ChartOne from '../../components/ChartOne.tsx';
-import ChartThree from '../../components/ChartThree.tsx';
-import ChartTwo from '../../components/ChartTwo.tsx';
-import ChatCard from '../../components/ChatCard.tsx';
-import MapOne from '../../components/MapOne.tsx';
-import TableOne from '../../components/TableOne.tsx';
+import React, { useState } from 'react';
 
 const ECommerce = () => {
+    const [isSidebarOpen, setSidebarOpen] = useState(true);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!isSidebarOpen);
+    };
+
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-                <CardOne />
-                <CardTwo />
-                <CardThree />
-                <CardFour />
-            </div>
+            <div className="flex h-screen bg-gray-100">
+                {/* Sidebar */}
+                {isSidebarOpen && (
+                    <div className="w-64 bg-white border-r overflow-y-auto">
+                        {/* Your sidebar content goes here */}
+                        <div className="p-4">
+                            <h1 className="text-2xl font-bold text-gray-800">E-Commerce</h1>
+                            {/* Add your sidebar links, categories, etc. here */}
+                            <button
+                                className="mt-4 px-2 py-1 bg-blue-200 text-white rounded-md"
+                                onClick={toggleSidebar}
+                            >
+                                Hide Sidebar
+                            </button>
+                        </div>
+                    </div>
+                )}
 
-            <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-                <ChartOne />
-                <ChartTwo />
-                <ChartThree />
-                <MapOne />
-                <div className="col-span-12 xl:col-span-8">
-                    <TableOne />
+                {/* Main Content */}
+                <div className={`flex-1 p-6 ${isSidebarOpen ? 'ml-64' : ''}`}>
+                    {/* Toggle button when the sidebar is hidden */}
+                    {!isSidebarOpen && (
+                        <button
+                            className="absolute top-4 left-4 px-2 py-1 bg-blue-200 text-white rounded-md"
+                            onClick={toggleSidebar}
+                        >
+                            Show Sidebar
+                        </button>
+                    )}
+
+                    {/* Your main content goes here */}
+                    <h1 className="text-2xl font-bold text-gray-800">Welcome to admin app!</h1>
+                    {/* Add your main content, product listings, etc. here */}
                 </div>
-                <ChatCard />
             </div>
         </>
     );
