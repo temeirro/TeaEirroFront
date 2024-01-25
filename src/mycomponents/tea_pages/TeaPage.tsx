@@ -6,10 +6,10 @@ export default function Example() {
     const [list, setList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(12);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { type } = useParams();
 
-    // Define the API endpoint
     const apiUrl = `http://teaeirro.com/api/get${type}Tea`;
 
     useEffect(() => {
@@ -22,12 +22,21 @@ export default function Example() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
-    }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
+    }, [apiUrl]);
 
-    // Pagination logic
+    // Move the filtering logic inside the useEffect
+    const filteredProducts = list.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Reset current page when searchQuery changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
+
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = list.slice(indexOfFirstProduct, indexOfLastProduct);
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -48,6 +57,22 @@ export default function Example() {
             <div className="bg-white">
                 <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                     <h2 className="text-2xl font-bold tracking-tight text-gray-900">{type} tea collection</h2>
+
+                    {/* Search input */}
+                    <div className="mt-6">
+                        <label htmlFor="search" className="block text-sm font-medium text-gray-700">
+                            Search by Name
+                        </label>
+                        <input
+                            type="text"
+                            id="search"
+                            name="search"
+                            className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500 block w-full"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                         {currentProducts.map((product) => (
                             <div key={product.id} className="group relative">
@@ -78,7 +103,7 @@ export default function Example() {
                     <div className="mt-10">
                         <nav className="flex justify-center">
                             <ul className="flex space-x-2">
-                                {Array.from({ length: Math.ceil(list.length / productsPerPage) }, (_, index) => (
+                                {Array.from({ length: Math.ceil(filteredProducts.length / productsPerPage) }, (_, index) => (
                                     <li key={index}>
                                         <button
                                             className={`text-gray-700 hover:text-gray-900 px-3 py-2 focus:outline-none ${
