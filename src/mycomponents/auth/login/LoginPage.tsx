@@ -58,10 +58,10 @@ const LoginPage = () => {
                     <Form
                         name="createCustomer"
                         labelCol={{
-                            span: 5,
+                            span: 24,
                         }}
                         wrapperCol={{
-                            span: 18,
+                            span: 24,
                         }}
                         initialValues={{ remember: true }}
                         onFinish={onFinish}
@@ -79,6 +79,7 @@ const LoginPage = () => {
                                 { required: true, message: 'This field is required!' },
                                 { min: 2, message: 'Email must be at least 2 characters!' },
                             ]}
+                            className="mb-4"
                         >
                             <Input autoComplete="email" id={"email"} />
                         </Form.Item>
@@ -92,11 +93,12 @@ const LoginPage = () => {
                                 { min: 6, message: 'Password must be at least 6 characters!' },
                             ]}
                             hasFeedback
+                            className="mb-4"
                         >
                             <Input.Password id={"password"} />
                         </Form.Item>
 
-                        <Form.Item wrapperCol={{ span: 24 }}>
+                        <Form.Item wrapperCol={{ span: 24 }} className="mb-4">
                             <button
                                 type="submit"
                                 className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -109,6 +111,7 @@ const LoginPage = () => {
             </Col>
         </Row>
     );
+
 };
 
 export default LoginPage;

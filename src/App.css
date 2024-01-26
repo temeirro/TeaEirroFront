@@ -42,3 +42,6 @@ body{
 .read-the-docs {
   color: #888;
 }
+.ant-btn-primary:not([disabled]) {
+  background:#1677ff !important;
+}

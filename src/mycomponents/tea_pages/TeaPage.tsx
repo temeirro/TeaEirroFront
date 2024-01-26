@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { Select, Button, Slider, InputNumber } from 'antd';
 
 export default function Example() {
     const [list, setList] = useState([]);
+    const [origins, setOrigins] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(12);
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedOrigin, setSelectedOrigin] = useState(null);
+    const [minPrice, setMinPrice] = useState(null);
+    const [maxPrice, setMaxPrice] = useState(null);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [currentProducts, setCurrentProducts] = useState([]);
+    const [sortOrder, setSortOrder] = useState(null); // Remove default value
+    const [sortedProducts, setSortedProducts] = useState([]);
+
+
 
     const { type } = useParams();
 
@@ -17,28 +28,73 @@ export default function Example() {
             .get(apiUrl)
             .then((resp) => {
                 setList(resp.data);
-                console.log(resp.data);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
+
+        axios
+            .get('http://teaeirro.com/api/getAllTeaOrigins')
+            .then((response) => setOrigins(response.data))
+            .catch((error) => console.error('Error fetching tea origins:', error));
     }, [apiUrl]);
 
-    // Move the filtering logic inside the useEffect
-    const filteredProducts = list.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    useEffect(() => {
+        const filteredProducts = list.filter((product) =>
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            (!selectedOrigin || product.tea_origin.name === selectedOrigin) &&
+            (minPrice === null || product.price >= minPrice) &&
+            (maxPrice === null || product.price <= maxPrice)
+        );
 
-    // Reset current page when searchQuery changes
+        let sortedFilteredProducts;
+
+        if (sortOrder === 'asc') {
+            sortedFilteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
+        } else if (sortOrder === 'desc') {
+            sortedFilteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
+        } else {
+            sortedFilteredProducts = filteredProducts; // No sorting when sortOrder is null
+        }
+
+        setFilteredProducts(sortedFilteredProducts);
+
+        const indexOfLastProduct = currentPage * productsPerPage;
+        const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+        const currentProducts = sortedFilteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+        setSortedProducts(sortedFilteredProducts);
+        setCurrentProducts(currentProducts);
+    }, [searchQuery, selectedOrigin, currentPage, productsPerPage, list, sortOrder, minPrice, maxPrice]);
+
+
+
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchQuery]);
-
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    }, [searchQuery, selectedOrigin, productsPerPage, minPrice, maxPrice]);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const handleOriginChange = (value) => {
+        setSelectedOrigin(value);
+    };
+
+    const handleClearFilter = () => {
+        setSearchQuery('');
+        setSelectedOrigin(null);
+        setMinPrice(null);
+        setMaxPrice(null);
+        setSortOrder(null);
+    };
+
+    const handleSortChange = (value) => {
+        setSortOrder(value);
+    };
+
+    const handlePriceChange = (values) => {
+        setMinPrice(values[0]);
+        setMaxPrice(values[1]);
+    };
+
 
     return (
         <>
@@ -72,6 +128,45 @@ export default function Example() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
+                    <div className="mt-6 flex gap-5">
+                    {/* Origin filter */}
+                    <Select
+
+                        placeholder="Select Tea Origin"
+                        onChange={handleOriginChange}
+                        value={selectedOrigin}
+                    >
+                        {origins.map((origin) => (
+                            <Select.Option key={origin.id} value={origin.name}>
+                                {origin.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+
+                    <div>
+                        <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                            Price Range
+                        </label>
+                        <div className="flex items-center">
+                            <Slider
+                                className={'w-52'}
+                                range
+                                value={[minPrice === null ? 0 : minPrice, maxPrice === null ? 2000 : maxPrice]}
+                                onChange={handlePriceChange}
+                                min={0}
+                                max={2000}
+                            />
+
+                        </div>
+                    </div>
+
+                        <Button onClick={handleClearFilter}>
+                            Clear Filters
+                        </Button>
+                    </div>
+
+
+
 
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                         {currentProducts.map((product) => (

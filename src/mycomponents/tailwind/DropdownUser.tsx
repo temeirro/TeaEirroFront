@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {AuthReducerActionType, IAuthReducerState} from "../auth/login/AuthReducer.ts";
 import {
     ChartBarIcon,
 } from '@heroicons/react/24/outline'
+import {Image} from "antd";
 const DropdownUser = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const {user} = useSelector((redux: any)=>redux.auth as IAuthReducerState)
@@ -63,7 +64,11 @@ const DropdownUser = () => {
         </span>
 
                 <span className="h-12 w-12 rounded-full">
-          <img src={'http://teaeirro.com/upload/' + user?.image} alt="User" />
+                     <Image
+                         src={'http://teaeirro.com/upload/' + user?.image}
+                         alt="User"
+                         width={50}
+                     />
         </span>
 
                 <svg
