@@ -209,6 +209,7 @@ const TeaPage = ({ onSelectPage }) => {
             </Select>
 
 
+
             <Button onClick={handleClearFilter} style={{ marginLeft: 16 }}>
                 Clear Filters
             </Button>

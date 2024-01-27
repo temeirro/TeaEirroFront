@@ -6,6 +6,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const { Option } = Select;
 
+
+
+
+
 const EditTeaPage = () => {
     const { Id } = useParams();
     const [tea, setTea] = useState({});
@@ -18,32 +22,22 @@ const EditTeaPage = () => {
         const fetchData = async () => {
             try {
                 const teaResponse = await axios.get(`http://teaeirro.com/api/getTea/${Id}`);
-                setTea(teaResponse.data); // Assuming the API response contains tea details
-
+                setTea(teaResponse.data);
+                console.log(teaResponse.data);
                 const typesResponse = await axios.get("http://teaeirro.com/api/getAllTeaTypes");
-                setTeaTypes(typesResponse.data); // Assuming the API response contains an array of tea types
+                setTeaTypes(typesResponse.data);
 
                 const originsResponse = await axios.get("http://teaeirro.com/api/getAllTeaOrigins");
-                setTeaOrigins(originsResponse.data); // Assuming the API response contains an array of tea origins
-                console.log("Image URLs:", teaResponse.data.tea_images?.map(image => image.name));
+                setTeaOrigins(originsResponse.data);
 
-                // Set initial values for the form fields
                 form.setFieldsValue({
                     name: teaResponse.data.name,
                     description: teaResponse.data.description,
                     ingredients: teaResponse.data.ingredients,
-                    price: teaResponse.data.price,
+                    price: parseFloat(teaResponse.data.price),
                     origin: teaResponse.data.origin_id,
                     type: teaResponse.data.type_id,
-                    images: teaResponse.data.tea_images?.map((image, index) => ({
-                        uid: index,
-                        name: image.name,
-                        status: 'done',
-                        thumbUrl: 'http://teaeirro.com/upload/' + image.name, // Use thumbUrl for preview
-                        response: {
-                            thumbUrl: 'http://teaeirro.com/upload/' + image.name, // Also set thumbUrl in response
-                        },
-                    })),
+                    images: teaResponse.data.tea_images.map(image => ({ url: 'http://teaeirro.com/upload/' + image.name, name: image.name }))
 
                 });
             } catch (error) {
@@ -54,8 +48,38 @@ const EditTeaPage = () => {
         fetchData();
     }, [Id, form]);
 
+    const handleAddImage = async (file) => {
+        try {
+            const formData = new FormData();
+            formData.append("image", file);
+            console.log(formData);
+            // Make the POST request to add the image
+            const response = await axios.post(`http://teaeirro.com/api/addTeaImage/${Id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            window.location.reload();
+
+            console.log("Image added successfully:", response.data);
+        } catch (error) {
+            console.error("Error adding image:", error);
+        }
+    };
+    const handleDeleteImage = async (name) => {
+        try {
+            // Make the DELETE request to delete the image
+            const response = await axios.delete(`http://teaeirro.com/api/deleteTeaImage/${Id}/${name}`);
+
+            console.log("Image deleted successfully:", response.data);
+        } catch (error) {
+            console.error("Error deleting image:", error);
+        }
+    };
     const onFinish = async (values) => {
         try {
+            console.log(values);
             const formData = new FormData();
             formData.append("name", values.name);
             formData.append("description", values.description);
@@ -64,21 +88,15 @@ const EditTeaPage = () => {
             formData.append("type_id", values.type);
             formData.append("origin_id", values.origin);
 
-            // Append each file to the FormData
-            values.images.forEach((image, index) => {
-                formData.append(`images[${index}]`, image.originFileObj);
-            });
-
-            const response = await axios.post(`http://teaeirro.com/api/editTea/${Id}`, formData, {
+            // Make the POST request without handling images
+            const response = await axios.post(`http://teaeirro.com/api/editTeaWithoutImages/${Id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
 
             console.log("Tea updated successfully:", response.data);
-
             navigate(-1);
-
         } catch (error) {
             console.error("Error updating tea:", error);
         }
@@ -94,8 +112,20 @@ const EditTeaPage = () => {
 
     return (
         <div className="container mx-auto mt-8">
-            <h1 className="text-3xl text-white font-bold mb-6">Edit Tea</h1>
-
+            <h1 className=" text-white font-bold text-center mb-6">Edit Tea</h1>
+            <div
+                className="absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-3xl  "
+                aria-hidden="true"
+                style={{ zIndex: -1 }} // Ensure the background is behind the header
+            >
+                <div
+                    className="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#1a08bf] to-[#ff80a0] opacity-50 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
+                    style={{
+                        clipPath:
+                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                    }}
+                />
+            </div>
             <Form
                 form={form}
                 name="editTeaForm"
@@ -205,21 +235,36 @@ const EditTeaPage = () => {
                         },
                     ]}
                 >
-                    <Upload name="logo" accept="image/*" action="/upload.do" listType="picture" beforeUpload={() => false}>
+                    <Upload
+                        name="images"
+                        accept="image/*"
+                        listType="picture"
+                        beforeUpload={() => false} // Return false to prevent file upload in edit mode
+                        onRemove={(file) => {
+                            handleDeleteImage(file.name);
+
+                        }}
+                        onChange={({ file, fileList }) => {
+
+                                handleAddImage(file);
+
+
+                        }}
+
+                    >
                         <Button icon={<UploadOutlined />}>Click to upload</Button>
                     </Upload>
                 </Form.Item>
-
 
 
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
                     <Button className={'bg-blue-200'} htmlType="submit">
                         Update Tea
                     </Button>
-                    <Button onClick={handleClear} className={'ml-3'} htmlType="submit">
+                    <Button onClick={handleClear} className={'ml-3'} htmlType="button">
                         Clear
                     </Button>
-                    <Button onClick={handleCancel} className={'ml-3'} htmlType="submit">
+                    <Button onClick={handleCancel} className={'ml-3'} htmlType="button">
                         Cancel
                     </Button>
                 </Form.Item>

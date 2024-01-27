@@ -11,6 +11,7 @@ import TeaPage from "./mycomponents/tea_pages/TeaPage.tsx";
 import TeaDetails from "./mycomponents/tea_pages/TeaDetails.tsx";
 import AddTeaPage from "./mycomponents/admin/AddTeaPage.tsx";
 import EditTeaPage from "./mycomponents/admin/EditTeaPage.tsx";
+import PhilosophyPage from "./mycomponents/header_pages/PhilosophyPage.tsx";
 
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
             <Route path="tea/details/:Id" element={<TeaDetails/>}/>
             <Route path="addTea" element={<AddTeaPage/>}/>
             <Route path="editTea/:Id" element={<EditTeaPage/>}/>
+
+            <Route path="phil" element={<PhilosophyPage/>}/>
 
         </Routes>
 

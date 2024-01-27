@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Form, Input, message, Modal, Row, Upload } from "antd";
 import type { UploadProps } from "antd/es/upload";
@@ -6,10 +6,12 @@ import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
 import { IRegisterForm, IRegister, IUserLoginInfo, IUser } from "../authmodels.ts";
 import { jwtDecode } from "jwt-decode";
-import { imageConverter } from "./imageconvert.ts";
+import {imageConverter, IUploadedFile} from "./imageconvert.ts";
 import { useNavigate } from "react-router-dom";
 import { AuthReducerActionType } from "../login/AuthReducer.ts";
 import { useDispatch } from "react-redux";
+import GoogleLogin from "react-google-login";
+import {gapi} from "gapi-script";
 
 const RegisterPage = () => {
     const navigator = useNavigate();
@@ -22,8 +24,68 @@ const RegisterPage = () => {
 
     const [messageApi, contextHolder] = message.useMessage();
     const handleCancel = () => setPreviewOpen(false);
+
+    useEffect(() => {
+       function start(){
+           gapi.client.init({
+               clientId: '211709141050-djbc187ppdgqef3b4qd9q1bphmgcc5tn.apps.googleusercontent.com',
+               scope: ''
+           })
+       };
+       gapi.load('client:auth2',start);
+    });
+    const handleGoogleSuccess = async (response) => {
+        // Handle successful Google Sign-In
+        console.log("Google Sign-In Success", response);
+
+        // Extract relevant information from the response
+        const { givenName, familyName, email, imageUrl } = response.profileObj;
+
+
+
+
+
+        // Set form values with the extracted data
+        form.setFieldsValue({
+            name: givenName,
+            lastName: familyName,
+            email: email,
+            image: imageUrl
+        });
+
+
+    };
+
+    const handleGoogleFailure = (error) => {
+        // Handle failed Google Sign-In
+        console.error("Google Sign-In Failed", error);
+        // Perform any additional logic (e.g., showing an error message)
+    };
+
+    const handleChange: UploadProps["onChange"] = ({ fileList: newFile }) => {
+        const newFileList = newFile.slice(-1);
+        setFile(newFileList[0]);
+
+        // Use the imageConverter function to get the file
+        const uploadedFile = imageConverter({ fileList: newFileList }) as IUploadedFile;
+
+        // Check if the uploaded file is an image, and if not, treat it as a URL
+        if (uploadedFile?.originFileObj instanceof File) {
+            // If it's a file, set the URL to the preview URL
+            form.setFieldsValue({
+                image: uploadedFile.thumbUrl || uploadedFile.url,
+            });
+        } else {
+            // If it's a URL, set the URL directly
+            form.setFieldsValue({
+                image: uploadedFile.url,
+            });
+        }
+    };
+
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
+            // If the file doesn't have a URL or preview, set the preview using the originFileObj
             file.preview = URL.createObjectURL(file.originFileObj as File);
         }
 
@@ -32,10 +94,6 @@ const RegisterPage = () => {
         setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1));
     };
 
-    const handleChange: UploadProps["onChange"] = ({ fileList: newFile }) => {
-        const newFileList = newFile.slice(-1);
-        setFile(newFileList[0]);
-    };
 
     const onReset = () => {
         onClear();
@@ -191,7 +249,7 @@ const RegisterPage = () => {
 
                     <Form.Item
                         label="Your Photo"
-                        name={"image"}
+                        name="image"
                         getValueFromEvent={imageConverter}
                     >
                         <Upload
@@ -268,7 +326,30 @@ const RegisterPage = () => {
                         <Button className="bg-blue-200" htmlType="button" onClick={onCancel}>
                             Cancel
                         </Button>
+
+
                     </div>
+
+                    <GoogleLogin
+                        render={renderProps => (
+                            <button onClick={renderProps.onClick}
+                                className="mt-5  group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
+                                <div className="relative flex items-center space-x-4 justify-center">
+                                    <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                         className="left-0 w-5" alt="google logo"/>
+                                    <span
+                                        className="block w-max font-semibold tracking-wide text-gray-700 dark:text-white text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Continue
+                                        with Google
+                                    </span>
+                                </div>
+                            </button>
+                            )}
+                        clientId="211709141050-djbc187ppdgqef3b4qd9q1bphmgcc5tn.apps.googleusercontent.com"
+                        buttonText="Sign up with Google"
+                        onSuccess={handleGoogleSuccess}
+                        onFailure={handleGoogleFailure}
+                        cookiePolicy={'single_host_origin'}
+                    />
                 </Form>
             </Col>
         </Row>
