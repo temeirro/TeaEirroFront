@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, InputNumber, Select, Upload, Button, Alert } from "antd";
+import { useState, useEffect } from "react";
+import { Form, Input, InputNumber, Select, Upload, Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -35,6 +35,7 @@ const AddTeaPage = () => {
         fetchTeaOrigins();
     }, []);
 
+    // @ts-ignore
     const onFinish = async (values) => {
         try {
             const formData = new FormData();
@@ -46,6 +47,7 @@ const AddTeaPage = () => {
             formData.append("origin_id", values.origin);
 
             // Append each file to the FormData
+            // @ts-ignore
             values.images.forEach((image, index) => {
                 formData.append(`images[${index}]`, image.originFileObj);
             });
@@ -76,6 +78,8 @@ const AddTeaPage = () => {
 
     }
 
+    // @ts-ignore
+    
     return (
         <div className="container mx-auto mt-8">
             <h1 className=" text-white font-bold text-center mb-6">New Tea</h1>
@@ -162,9 +166,9 @@ const AddTeaPage = () => {
                     ]}
                 >
                     <Select placeholder="Select tea origin" className="w-full">
-                        {teaOrigins.map((origin) => (
-                            <Option key={origin.id} value={origin.id}>
-                                {origin.name}
+                        {teaOrigins.map(({id, name}) => (
+                            <Option key={id} value={id}>
+                                {name}
                             </Option>
                         ))}
                     </Select>
@@ -181,9 +185,9 @@ const AddTeaPage = () => {
                     ]}
                 >
                     <Select placeholder="Select tea type" className="w-full">
-                        {teaTypes.map((type) => (
-                            <Option key={type.id} value={type.id}>
-                                {type.name}
+                        {teaTypes.map(({id, name}) => (
+                            <Option key={id} value={id}>
+                                {name}
                             </Option>
                         ))}
                     </Select>

@@ -14,7 +14,7 @@ const cartReducer = (state = initialState, action) => {
 
         case 'REMOVE_FROM_CART':
             const itemIdToRemove = action.payload;
-            const updatedRemoveItems = state.items.filter(item => item.id !== itemIdToRemove);
+            const updatedRemoveItems = state.items.filter(({id}) => id !== itemIdToRemove);
             localStorage.setItem('cart', JSON.stringify(updatedRemoveItems));
             return {
                 ...state,
@@ -23,8 +23,9 @@ const cartReducer = (state = initialState, action) => {
 
         case 'UPDATE_CART_ITEM':
             const updatedCartItem = action.payload;
-            const updatedItems = state.items.map(item =>
-                item.id === updatedCartItem.id ? updatedCartItem : item
+            const updatedItems = state.items.map(item => {
+                    return item["id"] === updatedCartItem.id ? updatedCartItem : item;
+                }
             );
             localStorage.setItem('cart', JSON.stringify(updatedItems));
             return {

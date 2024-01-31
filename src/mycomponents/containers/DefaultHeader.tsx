@@ -1,16 +1,16 @@
-import React, { Fragment, useState } from 'react'
-import {useDispatch, useSelector} from "react-redux";
+import  { Fragment, useState } from 'react'
+import {useSelector} from "react-redux";
+import image from "../../images/icon.png"
 
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
     XMarkIcon,
     HeartIcon,
-    ShoppingBagIcon, MagnifyingGlassCircleIcon
+    ShoppingBagIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
-import {AuthReducerActionType, IAuthReducerState} from "../auth/login/AuthReducer.ts";
-import {useNavigate} from "react-router-dom";
+import { IAuthReducerState} from "../auth/login/AuthReducer.ts";
 import DropdownUser from "../tailwind/DropdownUser.tsx";
 
 const colors = ['bg-gray-100', 'bg-green-100', 'bg-yellow-100', 'bg-blue-100', 'bg-white', 'bg-red-100', 'bg-green-100', 'bg-gray-200'];
@@ -31,13 +31,15 @@ const callsToAction = [
 
 ]
 
+// @ts-ignore
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function Example() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const {isAuth, user} = useSelector((redux: any)=>redux.auth as IAuthReducerState)
+    const {isAuth} = useSelector((redux: any)=>redux.auth as IAuthReducerState)
+    // @ts-ignore
 
     const cartItems = useSelector((state) => state.cart.items);
 
@@ -50,7 +52,7 @@ export default function Example() {
                 <div className="flex lg:flex-1">
                     <a href="/" className="-m-1.5 p-1.5">
                         <span className="sr-only">Your Company</span>
-                        <img className="h-8 w-auto" src="../../../public/icon.png" alt="" />
+                        <img className="h-8 w-auto" src={image} alt="" />
                     </a>
                 </div>
                 <div className="flex lg:hidden">

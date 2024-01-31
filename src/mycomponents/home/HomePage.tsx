@@ -1,4 +1,3 @@
-import { Calendar, Card, Col, Row } from "antd";
 import image from "../../images/home2.png";
 import {useEffect} from "react";
 

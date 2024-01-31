@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Form, Input, message, Modal, Row, Upload } from "antd";
 import type { UploadProps } from "antd/es/upload";
@@ -6,7 +6,7 @@ import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
 import {IRegisterForm, IRegister, IUserLoginInfo, IUser, IRegisterGoogle} from "../authmodels.ts";
 import { jwtDecode } from "jwt-decode";
-import {imageConverter, IUploadedFile} from "./imageconvert.ts";
+import {imageConverter} from "./imageconvert.ts";
 import { useNavigate } from "react-router-dom";
 import { AuthReducerActionType } from "../login/AuthReducer.ts";
 import { useDispatch } from "react-redux";
@@ -177,13 +177,6 @@ const RegisterPage = () => {
         });
     };
 
-    const error = () => {
-        messageApi.open({
-            type: "error",
-            duration: 10,
-            content: "Registration error!",
-        });
-    };
 
     return (
         <div className="container mx-auto mt-8">

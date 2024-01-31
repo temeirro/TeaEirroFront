@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Form, Input, InputNumber, Select, Upload, Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -12,6 +12,7 @@ const { Option } = Select;
 
 const EditTeaPage = () => {
     const { Id } = useParams();
+    // @ts-ignore
     const [tea, setTea] = useState({});
     const [teaTypes, setTeaTypes] = useState([]);
     const [teaOrigins, setTeaOrigins] = useState([]);
@@ -67,7 +68,7 @@ const EditTeaPage = () => {
             console.error("Error adding image:", error);
         }
     };
-    const handleDeleteImage = async (name) => {
+    const handleDeleteImage = async (name : any) => {
         try {
             // Make the DELETE request to delete the image
             const response = await axios.delete(`http://teaeirro.com/api/deleteTeaImage/${Id}/${name}`);
@@ -77,7 +78,7 @@ const EditTeaPage = () => {
             console.error("Error deleting image:", error);
         }
     };
-    const onFinish = async (values) => {
+    const onFinish = async (values : any) => {
         try {
             console.log(values);
             const formData = new FormData();
@@ -196,9 +197,9 @@ const EditTeaPage = () => {
                     ]}
                 >
                     <Select placeholder="Select tea origin" className="w-full">
-                        {teaOrigins.map((origin) => (
-                            <Option key={origin.id} value={origin.id}>
-                                {origin.name}
+                        {teaOrigins.map(({id, name}) => (
+                            <Option key={id} value={id}>
+                                {name}
                             </Option>
                         ))}
                     </Select>
@@ -215,9 +216,9 @@ const EditTeaPage = () => {
                     ]}
                 >
                     <Select placeholder="Select tea type" className="w-full">
-                        {teaTypes.map((type) => (
-                            <Option key={type.id} value={type.id}>
-                                {type.name}
+                        {teaTypes.map(({id, name}) => (
+                            <Option key={id} value={id}>
+                                {name}
                             </Option>
                         ))}
                     </Select>
@@ -244,7 +245,7 @@ const EditTeaPage = () => {
                             handleDeleteImage(file.name);
 
                         }}
-                        onChange={({ file, fileList }) => {
+                        onChange={({ file }) => {
 
                                 handleAddImage(file);
 

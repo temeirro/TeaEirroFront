@@ -1,8 +1,6 @@
 
 import {useEffect, useState} from 'react'
-import {Carousel, Image, Spin} from "antd";
-import { Avatar, Card } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import {Image, Spin} from "antd";
 import { Heart, Bookmark, Share2, MessageCircle } from "react-feather"
 import ImageCard from "./ImageCard.tsx";
 
@@ -13,22 +11,6 @@ import image3 from "../../images/phil/phil3.jpg"
 import image4 from "../../images/phil/phil4.jpg"
 import image5 from "../../images/phil/phil5.jpg"
 import image6 from "../../images/phil/phil6.jpg"
-
-const { Meta } = Card;
-
-
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-const contentStyle: React.CSSProperties = {
-    height: '360px',
-    color: '#fff',
-    lineHeight: '360px',
-    textAlign: 'center',
-    background: '#7e91b0',
-};
-
 
 export default function Example() {
     const [loading, setLoading] = useState(true); // Initial loading state

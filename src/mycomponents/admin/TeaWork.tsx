@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Button, Image, Select, Modal, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -40,9 +40,10 @@ const TeaPage = ({ onSelectPage }) => {
 
     useEffect(() => {
         const filteredTeaList = teaList.filter(tea => {
-            const typeFilter = selectedTeaType ? tea.tea_type.name === selectedTeaType : true;
-            const originFilter = selectedTeaOrigin ? tea.tea_origin.name === selectedTeaOrigin : true;
-            const nameFilter = tea.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const typeFilter = selectedTeaType ? tea?.["tea_type"]?.["name"] === selectedTeaType : true;
+            const originFilter = selectedTeaOrigin ? tea?.["tea_origin"]?.["name"] === selectedTeaOrigin : true;
+            // @ts-ignore
+            const nameFilter = tea?.["name"].toLowerCase().includes(searchTerm.toLowerCase());
             return typeFilter && originFilter && nameFilter;
         });
         setFilteredTeaList(filteredTeaList);
@@ -72,7 +73,7 @@ const TeaPage = ({ onSelectPage }) => {
             });
 
             if (response.ok) {
-                const updatedTeaList = teaList.filter(tea => tea.id !== teaId);
+                const updatedTeaList = teaList.filter(tea => tea?.["id"] !== teaId);
                 setTeaList(updatedTeaList);
                 setFilteredTeaList(updatedTeaList);
                 console.log(`Tea with ID ${teaId} deleted successfully.`);
@@ -197,8 +198,8 @@ const TeaPage = ({ onSelectPage }) => {
                 value={selectedTeaType}
             >
                 {teaTypes.map(teaType => (
-                    <Select.Option key={teaType.id} value={teaType.name}>
-                        {teaType.name}
+                    <Select.Option key={teaType?.["id"]} value={teaType?.["name"]}>
+                        {teaType?.["name"]}
                     </Select.Option>
                 ))}
             </Select>
@@ -210,8 +211,8 @@ const TeaPage = ({ onSelectPage }) => {
                 value={selectedTeaOrigin}
             >
                 {teaOrigins.map(teaOrigin => (
-                    <Select.Option key={teaOrigin.id} value={teaOrigin.name}>
-                        {teaOrigin.name}
+                    <Select.Option key={teaOrigin?.["id"]} value={teaOrigin?.["name"]}>
+                        {teaOrigin?.["name"]}
                     </Select.Option>
                 ))}
             </Select>
@@ -225,7 +226,7 @@ const TeaPage = ({ onSelectPage }) => {
             <Button onClick={handleClearSearch} style={{ marginLeft: 16 }}>
                 Clear Search
             </Button>
-
+            {/*@ts-ignore*/}
             <Table dataSource={filteredTeaList} columns={columns} scroll={{ x: true }} />
 
             <Modal

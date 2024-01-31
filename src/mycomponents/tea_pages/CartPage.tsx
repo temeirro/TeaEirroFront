@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {clearCart, deleteFromCart} from './CartActions.ts';
 import { TrashIcon } from '@heroicons/react/24/outline';
@@ -7,13 +6,16 @@ import image from "../../images/tea.png"
 
 export default function Example() {
     const dispatch = useDispatch();
+    // @ts-ignore
     const cartItems = useSelector((state) => state.cart.items);
+    // @ts-ignore
 
     const handleRemoveFromCart = (productId) => {
         // Dispatch the action to remove item from the cart
         dispatch(deleteFromCart(productId));
     };
     const calculateTotalPrice = () => {
+        // @ts-ignore
         return cartItems.reduce((total, item) => total + item.price, 0);
     };
     return (
@@ -54,6 +56,7 @@ export default function Example() {
                                 </Button>
                             </div>
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+
                         {cartItems.map((product) => (
                             <div key={product.id} className="group relative">
                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-50 transition-opacity duration-300 lg:h-80">

@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {AuthReducerActionType, IAuthReducerState} from "../auth/login/AuthReducer.ts";
 import {
     ChartBarIcon,
 } from '@heroicons/react/24/outline'
-import {Image} from "antd";
 const DropdownUser = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const {user} = useSelector((redux: any)=>redux.auth as IAuthReducerState)

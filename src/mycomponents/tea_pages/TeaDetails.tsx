@@ -21,7 +21,6 @@
 */
 import {useEffect, useState} from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
-import { RadioGroup } from '@headlessui/react'
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {Image} from "antd";
@@ -43,6 +42,7 @@ function classNames(...classes) {
 
 export default function Example() {
     const dispatch = useDispatch();
+    // @ts-ignore
     const cartItems = useSelector((state) => state.cart.items);
 
     const [selectedQuantity, setSelectedQuantity] = useState(100); // Default quantity is 100g
@@ -69,6 +69,7 @@ export default function Example() {
 
         const calculatePrice = () => {
             // Update the price based on the selected quantity
+            // @ts-ignore
             return `${(selectedQuantity / 100) * parseFloat(tea?.price.replace('$', '')).toFixed(2)}₴`;
 
         };
@@ -76,7 +77,7 @@ export default function Example() {
 
     const handleAddToCart = () => {
         const existingCartItem = cartItems.find(
-            item => item.teaId === tea?.id && item.weight === selectedQuantity
+            item => item.teaId === tea?.["id"] && item.weight === selectedQuantity
         );
         if (existingCartItem) {
             // If the tea is already in the cart, update its quantity
@@ -91,9 +92,9 @@ export default function Example() {
             // If the tea is not in the cart, add a new item with a new ID
             const cartItem = {
                 id: uuidv4(),
-                teaId: tea?.id,
-                name: tea?.name,
-                image: tea?.tea_images?.[0].name,
+                teaId: tea?.["id"],
+                name: tea?.["name"],
+                image: tea?.["tea_images"]?.[0]?.["name"],
                 price: parseFloat(calculatePrice()),
                 quantity: 1, // Start from 1
                 weight: selectedQuantity, // Add the weight field
@@ -129,8 +130,8 @@ export default function Example() {
                         ))}
 
                         <li className="text-sm">
-                            <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                                {tea?.name}
+                            <a  aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+                                {tea?.["name"]}
                             </a>
                         </li>
                     </ol>
@@ -138,7 +139,8 @@ export default function Example() {
 
                 {/* Image gallery */}
                 <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-                    {tea?.tea_images?.map((image, index) => (
+                    {/*@ts-ignore*/}
+                    {tea?.["tea_images"]?.map((image, index) => (
                         <div key={index} className={`aspect-h-2 aspect-w-3 overflow-hidden rounded-lgS`}>
                             <Image
                                 src={`http://teaeirro.com/upload/${image?.name}`}
@@ -149,7 +151,7 @@ export default function Example() {
                     ))}
 
                     <Image
-                        src={`http://teaeirro.com/upload/${tea?.tea_type?.name}.jpg`}
+                        src={`http://teaeirro.com/upload/${tea?.["tea_type"]?.["name"]}.jpg`}
                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                     />
                 </div>
@@ -157,7 +159,7 @@ export default function Example() {
                 {/* Product info */}
                 <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
                     <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{tea?.name}</h1>
+                        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{tea?.["name"]}</h1>
                     </div>
 
                     {/* Options */}
@@ -225,7 +227,7 @@ export default function Example() {
                             <h3 className="sr-only">Description</h3>
 
                             <div className="space-y-6">
-                                <p className="text-base text-gray-900">{tea?.description}</p>
+                                <p className="text-base text-gray-900">{tea?.["description"]}</p>
                             </div>
                         </div>
                         <div className={'flex gap-40'}>
@@ -234,8 +236,8 @@ export default function Example() {
 
                                 <div className="mt-4">
                                     <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                                        {tea?.ingredients &&
-                                            tea?.ingredients.split(',').map((ingredient, index) => (
+                                        {/*@ts-ignore*/}
+                                        {tea?.["ingredients"] && tea?.["ingredients"]?.split(',').map((ingredient, index) => (
                                                 <li key={index} className="text-gray-400">
                                                     <span className="text-gray-600">{ingredient.trim()}</span>
                                                 </li>
@@ -248,10 +250,10 @@ export default function Example() {
                                 <h2 className="text-sm font-medium text-gray-900">Origin</h2>
 
                                 <div className="mt-4 space-y-6 flex gap-16">
-                                    <p className="text-sm text-gray-600">{tea?.tea_origin.name}</p>
+                                    <p className="text-sm text-gray-600">{tea?.["tea_origin"]?.["name"]}</p>
                                     <img
-                                        src={`http://teaeirro.com/upload/${tea?.tea_origin.name}.svg`}
-                                        alt={tea?.tea_origin.name}
+                                        src={`http://teaeirro.com/upload/${tea?.["tea_origin"]?.["name"]}.svg`}
+                                        alt={tea?.["tea_origin"]?.["name"]}
                                         className="w-36"
                                     />
                                 </div>

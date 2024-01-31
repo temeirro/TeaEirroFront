@@ -1,6 +1,6 @@
-import { Alert, Button, Col, Divider, Form, Input, Row } from "antd";
-import {ILogin, ILoginGoogle, ILoginResult, IRegisterGoogle, IUser, IUserLoginInfo} from "../authmodels.ts";
-import React, {useEffect, useState} from "react";
+import { Alert, Col, Divider, Form, Input, Row } from "antd";
+import {ILogin, ILoginGoogle, ILoginResult, IUser} from "../authmodels.ts";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";

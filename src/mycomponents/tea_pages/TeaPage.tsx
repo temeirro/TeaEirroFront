@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Select, Button, Slider, InputNumber } from 'antd';
+import { Select, Button, Slider } from 'antd';
 import image from "../../images/tea.png"
 
 export default function Example() {
@@ -16,6 +16,7 @@ export default function Example() {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentProducts, setCurrentProducts] = useState([]);
     const [sortOrder, setSortOrder] = useState(null); // Remove default value
+    // @ts-ignore
     const [sortedProducts, setSortedProducts] = useState([]);
 
 
@@ -42,18 +43,19 @@ export default function Example() {
 
     useEffect(() => {
         const filteredProducts = list.filter((product) =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            (!selectedOrigin || product.tea_origin.name === selectedOrigin) &&
-            (minPrice === null || product.price >= minPrice) &&
-            (maxPrice === null || product.price <= maxPrice)
+        // @ts-ignore
+            product?.["name"].toLowerCase().includes(searchQuery.toLowerCase()) &&
+            (!selectedOrigin || product?.["tea_origin"]?.["name"] === selectedOrigin) &&
+            (minPrice === null || product?.["price"] >= minPrice) &&
+            (maxPrice === null || product?.["price"] <= maxPrice)
         );
 
         let sortedFilteredProducts;
 
         if (sortOrder === 'asc') {
-            sortedFilteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
+            sortedFilteredProducts = filteredProducts.sort((a : any, b : any) => a.price - b.price);
         } else if (sortOrder === 'desc') {
-            sortedFilteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
+            sortedFilteredProducts = filteredProducts.sort((a : any, b : any) => b.price - a.price);
         } else {
             sortedFilteredProducts = filteredProducts; // No sorting when sortOrder is null
         }
@@ -87,9 +89,6 @@ export default function Example() {
         setSortOrder(null);
     };
 
-    const handleSortChange = (value) => {
-        setSortOrder(value);
-    };
 
     const handlePriceChange = (values) => {
         setMinPrice(values[0]);
@@ -137,9 +136,9 @@ src={image}
                         onChange={handleOriginChange}
                         value={selectedOrigin}
                     >
-                        {origins.map((origin) => (
-                            <Select.Option key={origin.id} value={origin.name}>
-                                {origin.name}
+                        {origins.map(({id, name}) => (
+                            <Select.Option key={id} value={name}>
+                                {name}
                             </Select.Option>
                         ))}
                     </Select>
@@ -170,26 +169,26 @@ src={image}
 
 
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                        {currentProducts.map((product) => (
-                            <div key={product.id} className="group relative">
+                        {currentProducts.map((product ) => (
+                            <div key={product?.["id"]} className="group relative">
                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-50 transition-opacity duration-300 lg:h-80">
                                     <img
-                                        src={`http://teaeirro.com/upload/${product.tea_images?.[0]?.name}`}
-                                        alt={product.name}
+                                        src={`http://teaeirro.com/upload/${product?.["tea_images"]?.[0]?.["name"]}`}
+                                        alt={product?.["name"]}
                                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                     />
                                 </div>
                                 <div className="mt-4 flex justify-between">
                                     <div>
                                         <h3 className="text-sm text-gray-700">
-                                            <a href={`/tea/details/${product.id}`}>
+                                            <a href={`/tea/details/${product?.["id"]}`}>
                                                 <span aria-hidden="true" className="absolute inset-0" />
-                                                {product.name}
+                                                {product?.["name"]}
                                             </a>
                                         </h3>
-                                        <p className="mt-1 text-sm text-gray-500">{product?.ingredients}</p>
+                                        <p className="mt-1 text-sm text-gray-500">{product?.["ingredients"]}</p>
                                     </div>
-                                    <p className="text-sm font-medium text-gray-900">{product.price}₴</p>
+                                    <p className="text-sm font-medium text-gray-900">{product?.["price"]}₴</p>
                                 </div>
                             </div>
                         ))}

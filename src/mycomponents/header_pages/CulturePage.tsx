@@ -1,11 +1,6 @@
 
 import {useEffect, useState} from 'react'
-import {Calendar, CalendarProps, Carousel, Col, Image, Row, Spin} from "antd";
-import { Avatar, Card } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
-import { Heart, Bookmark, Share2, MessageCircle } from "react-feather"
-import ImageCard from "./ImageCard.tsx";
-import {Dayjs} from "dayjs";
+import { Spin} from "antd";
 
 import image1 from "../../images/culture/cult1.png"
 import image2 from "../../images/culture/cult2.png"
@@ -16,25 +11,6 @@ import image6 from "../../images/culture/cult6.png"
 import image7 from "../../images/culture/cult7.png"
 import image8 from "../../images/culture/cult8.webp"
 import image9 from "../../images/culture/cult9.webp"
-
-const { Meta } = Card;
-
-
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-const contentStyle: React.CSSProperties = {
-    height: '360px',
-    color: '#fff',
-    lineHeight: '360px',
-    textAlign: 'center',
-    background: '#7e91b0',
-};
-
-const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
-    console.log(value.format('YYYY-MM-DD'), mode);
-};
 
 export default function Example() {
     const [loading, setLoading] = useState(true); // Initial loading state

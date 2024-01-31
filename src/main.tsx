@@ -26,6 +26,7 @@ if (localStorage.token) {
         } as IUser,
     });
 
+    // @ts-ignore
     const savedCart = JSON.parse(localStorage.getItem('cart'));
     if (Array.isArray(savedCart)) {
         savedCart.forEach((item) => {

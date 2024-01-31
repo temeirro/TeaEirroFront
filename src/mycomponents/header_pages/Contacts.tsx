@@ -1,31 +1,6 @@
-
-import { useState } from 'react'
-import {Calendar, CalendarProps, Carousel, Col, Image, Row} from "antd";
-import { Avatar, Card } from 'antd';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
-import { Heart, Bookmark, Share2, MessageCircle } from "react-feather"
-import ImageCard from "./ImageCard.tsx";
-import image from "../../images/quality.jpg"
+import {Calendar, CalendarProps, Col, Row} from "antd";
+import { Card } from 'antd';
 import {Dayjs} from "dayjs";
-
-const { Meta } = Card;
-
-const images = [
-    'https://assets.codepen.io/108082/jake-and-fin-1.jpg',
-    // ... (rest of the image URLs)
-    'https://assets.codepen.io/108082/jake-and-fin-7.jpg'
-];
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-const contentStyle: React.CSSProperties = {
-    height: '360px',
-    color: '#fff',
-    lineHeight: '360px',
-    textAlign: 'center',
-    background: '#7e91b0',
-};
 
 const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
     console.log(value.format('YYYY-MM-DD'), mode);

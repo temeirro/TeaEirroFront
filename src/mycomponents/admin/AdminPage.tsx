@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
-import { FiMenu, FiX } from 'react-icons/fi';
-import { useSelector } from "react-redux";
-import { IAuthReducerState } from "../auth/login/AuthReducer.ts";
+import { useState } from 'react';
 import DashboardPage from './DashboardPage.tsx';
 import TeaPage from './TeaWork.tsx';
-import {useNavigate} from "react-router-dom";
 import AddTeaPage from "./AddTeaPage.tsx";
 
 const ECommerce = () => {
     const [selectedPage, setSelectedPage] = useState('tea');
-    const { isAuth, user } = useSelector((redux: any) => redux.auth as IAuthReducerState);
 
+    // @ts-ignore
     const handlePageChange = (page) => {
         setSelectedPage(page);
     };
