@@ -1,16 +1,17 @@
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { BrowserRouter } from 'react-router-dom'
-import {Provider} from "react-redux";
-import {store} from "./store";
-import {jwtDecode} from "jwt-decode";
-import {IUser} from "./mycomponents/auth/authmodels.ts";
-import {AuthReducerActionType} from "./mycomponents/auth/login/AuthReducer.ts";
-import axios from "axios";
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { jwtDecode } from 'jwt-decode';
+import { IUser } from './mycomponents/auth/authmodels.ts';
+import { AuthReducerActionType } from './mycomponents/auth/login/AuthReducer.ts';
+import axios from 'axios';
 import './satoshi.css';
+import { addToCart } from './mycomponents/tea_pages/CartActions.ts';
 
-if(localStorage.token) {
+if (localStorage.token) {
     const user = jwtDecode(localStorage.token) as IUser;
     const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
 
@@ -22,20 +23,21 @@ if(localStorage.token) {
             name: user.name,
             lastName: user.lastName,
             role: user.role,
-        } as IUser
+        } as IUser,
     });
 
-
-
+    const savedCart = JSON.parse(localStorage.getItem('cart'));
+    if (Array.isArray(savedCart)) {
+        savedCart.forEach((item) => {
+            store.dispatch(addToCart(item));
+        });
+    }
 }
-
-
-
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
         <BrowserRouter>
             <App />
         </BrowserRouter>
-    </Provider>,
-)
+    </Provider>
+);

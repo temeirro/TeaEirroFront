@@ -1,11 +1,12 @@
-import { Fragment, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import {useDispatch, useSelector} from "react-redux";
 
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
     Bars3Icon,
     XMarkIcon,
-    HeartIcon
+    HeartIcon,
+    ShoppingBagIcon, MagnifyingGlassCircleIcon
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 import {AuthReducerActionType, IAuthReducerState} from "../auth/login/AuthReducer.ts";
@@ -38,10 +39,13 @@ export default function Example() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const {isAuth, user} = useSelector((redux: any)=>redux.auth as IAuthReducerState)
 
+    const cartItems = useSelector((state) => state.cart.items);
 
 
     return (
-        <header className=" bg-white dark:">
+        <div className="relative">
+
+        <header className=" bg-white z-20 dark:">
             <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
                     <a href="/" className="-m-1.5 p-1.5">
@@ -115,16 +119,16 @@ export default function Example() {
                         </Transition>
                     </Popover>
 
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    <a href="/culture" className="text-sm font-semibold leading-6 text-gray-900">
                         Culture
                     </a>
                     <a href="/phil" className="text-sm font-semibold leading-6 text-gray-900">
                         Our Philosophy
                     </a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                        Reviews
+                    <a href="/reviews" className="text-sm font-semibold leading-6 text-gray-900">
+                        Reviews [in dev]
                     </a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    <a href="/contacts" className="text-sm font-semibold leading-6 text-gray-900">
                         Contacts
                     </a>
                 </Popover.Group>
@@ -134,7 +138,8 @@ export default function Example() {
                         <div className="gap-5 hidden lg:flex lg:flex-1 lg:justify-end">
 
                             <DropdownUser></DropdownUser>
-
+                          <a href={'/cart'} className="flex items-center justify-center">  <ShoppingBagIcon className="flex items-center justify-center w-7 flex-none text-gray-400"/> </a>
+                            <span  className='underline h-auto flex items-center -ml-5'>{cartItems.length}</span>
 
                         </div>
                     ) : (
@@ -205,25 +210,25 @@ export default function Example() {
                                     )}
                                 </Disclosure>
                                 <a
-                                    href="#"
+                                    href="/culture"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Culture
                                 </a>
                                 <a
-                                    href="#"
+                                    href="/phil"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Our Philosophy
                                 </a>
                                 <a
-                                    href="#"
+                                    href="/reviews"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Reviews
                                 </a>
                                 <a
-                                    href="#"
+                                    href="/contacts"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Contacts
@@ -236,11 +241,19 @@ export default function Example() {
                                 >
                                     Log In
                                 </a>
+                                <a
+                                    href="/register"
+                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                >
+                                    Sign Up
+                                </a>
                             </div>
+
                         </div>
                     </div>
                 </Dialog.Panel>
             </Dialog>
         </header>
+        </div>
     )
 }

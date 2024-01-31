@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Select, Button, Slider, InputNumber } from 'antd';
+import image from "../../images/tea.png"
 
 export default function Example() {
     const [list, setList] = useState([]);
@@ -101,7 +102,7 @@ export default function Example() {
             <div className="relative w-full mt-8 lg:mt-0 group">
                 <img
                     className="w-full lg:h-[32rem] h-80 md:h-96 rounded-lg object-cover blur-sm group-hover:blur-none transition-all duration-300"
-                    src="https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/62cd64183291607.6540d86fd8376.png"
+src={image}
                     alt=""
                 />
 

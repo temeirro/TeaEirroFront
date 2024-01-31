@@ -24,57 +24,16 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import {useParams} from "react-router-dom";
 import axios from "axios";
+import {Image} from "antd";
+import {addToCart, updateCartItem} from './CartActions.ts';
+import {useDispatch, useSelector} from "react-redux"; // Adjust the path
+import { v4 as uuidv4 } from 'uuid';
+
 
 const product = {
-    name: 'Basic Tee 6-Pack',
-    price: '$192',
-    href: '#',
     breadcrumbs: [
         { id: 1, name: 'Tea', href: '/' },
     ],
-    images: [
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-            alt: 'Two each of gray, white, and black shirts laying flat.',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-            alt: 'Model wearing plain black basic tee.',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-            alt: 'Model wearing plain gray basic tee.',
-        },
-        {
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-            alt: 'Model wearing plain white basic tee.',
-        },
-    ],
-    colors: [
-        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-        { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-    ],
-    sizes: [
-        { name: 'XXS', inStock: false },
-        { name: 'XS', inStock: true },
-        { name: 'S', inStock: true },
-        { name: 'M', inStock: true },
-        { name: 'L', inStock: true },
-        { name: 'XL', inStock: true },
-        { name: '2XL', inStock: true },
-        { name: '3XL', inStock: true },
-    ],
-    description:
-        'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-    highlights: [
-        'Hand cut and sewn locally',
-        'Dyed with our proprietary colors',
-        'Pre-washed & pre-shrunk',
-        'Ultra-soft 100% cotton',
-    ],
-    details:
-        'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 }
 const reviews = { href: '#', average: 4, totalCount: 117 }
 
@@ -83,30 +42,69 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-    const { Id } = useParams();
-    const [tea, setTea] = useState();
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart.items);
 
-    const apiUrl = 'http://teaeirro.com/api/getTea/' + Id;
+    const [selectedQuantity, setSelectedQuantity] = useState(100); // Default quantity is 100g
+        const { Id } = useParams();
+        const [tea, setTea] = useState();
 
-    useEffect(() => {
-        axios.get(apiUrl)
-            .then(resp => {
-                setTea(resp.data);
-                console.log(resp.data);
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
+        const apiUrl = 'http://teaeirro.com/api/getTea/' + Id;
+
+        useEffect(() => {
+            axios
+                .get(apiUrl)
+                .then((resp) => {
+                    setTea(resp.data);
+                    console.log(resp.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        }, []); // The empty dependency array ensures that this effect runs only once, similar to componentDidMount
+
+        const handleQuantityChange = (e) => {
+            setSelectedQuantity(parseFloat(e.target.value));
+        };
+
+        const calculatePrice = () => {
+            // Update the price based on the selected quantity
+            return `${(selectedQuantity / 100) * parseFloat(tea?.price.replace('$', '')).toFixed(2)}₴`;
+
+        };
 
 
+    const handleAddToCart = () => {
+        const existingCartItem = cartItems.find(
+            item => item.teaId === tea?.id && item.weight === selectedQuantity
+        );
+        if (existingCartItem) {
+            // If the tea is already in the cart, update its quantity
+            const updatedCartItem = {
+                ...existingCartItem,
+                quantity: existingCartItem.quantity + 1, // Increment the quantity by 1
+                weight: existingCartItem.weight + selectedQuantity,
+                price: existingCartItem.price + existingCartItem.price,
+            };
+            dispatch(updateCartItem(updatedCartItem)); // Assume you have an action like updateCartItem to handle the update
+        } else {
+            // If the tea is not in the cart, add a new item with a new ID
+            const cartItem = {
+                id: uuidv4(),
+                teaId: tea?.id,
+                name: tea?.name,
+                image: tea?.tea_images?.[0].name,
+                price: parseFloat(calculatePrice()),
+                quantity: 1, // Start from 1
+                weight: selectedQuantity, // Add the weight field
+            };
+            dispatch(addToCart(cartItem)); // Assume you have an action like addToCart to handle the addition
+        }
+    };
 
     return (
 
         <div className="bg-white">
-
             <div className="pt-6">
                 <nav aria-label="Breadcrumb">
                     <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -142,23 +140,19 @@ export default function Example() {
                 <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
                     {tea?.tea_images?.map((image, index) => (
                         <div key={index} className={`aspect-h-2 aspect-w-3 overflow-hidden rounded-lgS`}>
-                            <img
+                            <Image
                                 src={`http://teaeirro.com/upload/${image?.name}`}
                                 alt={image?.alt}
                                 className="h-full w-full object-cover object-center"
                             />
-
                         </div>
                     ))}
 
-
-                    <img
+                    <Image
                         src={`http://teaeirro.com/upload/${tea?.tea_type?.name}.jpg`}
                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                     />
-
                 </div>
-
 
                 {/* Product info */}
                 <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
@@ -169,7 +163,7 @@ export default function Example() {
                     {/* Options */}
                     <div className="mt-4 lg:row-span-3 lg:mt-0">
                         <h2 className="sr-only">Product information</h2>
-                        <p className="text-3xl tracking-tight text-gray-900">{tea?.price}₴</p>
+                        <p className="text-3xl tracking-tight text-gray-900">{calculatePrice()}</p>
 
                         {/* Reviews */}
                         <div className="mt-6">
@@ -188,20 +182,37 @@ export default function Example() {
                                     ))}
                                 </div>
                                 <p className="sr-only">{reviews.average} out of 5 stars</p>
-                                <a href={reviews.href} className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                <a className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
                                     {reviews.totalCount} reviews
                                 </a>
                             </div>
                         </div>
 
                         <form className="mt-10">
+                            {/* Quantity Selector */}
+                            <div className="mt-4">
+                                <label htmlFor="quantity" className="text-sm font-medium text-gray-900">
+                                    Quantity
+                                </label>
+                                <select
+                                    id="quantity"
+                                    name="quantity"
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                                    value={selectedQuantity}
+                                    onChange={handleQuantityChange}
+                                >
+                                    <option value={100}>100g</option>
+                                    <option value={250}>250g</option>
+                                    <option value={500}>500g</option>
+                                    <option value={1000}>1kg</option>
+                                </select>
+                            </div>
 
-
-
-
+                            {/* Add to Bag Button */}
                             <button
-                                type="submit"
-                                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-400 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                type="button"
+                                onClick={handleAddToCart}
+                                className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-300 px-8 py-3 text-base font-medium text-white hover:from-indigo-500 hover:via-purple-600 hover:to-pink-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
                                 Add to bag
                             </button>
@@ -218,35 +229,34 @@ export default function Example() {
                             </div>
                         </div>
                         <div className={'flex gap-40'}>
+                            <div className="mt-10">
+                                <h3 className="text-sm font-medium text-gray-900">Ingredients</h3>
 
-                        <div className="mt-10">
-                            <h3 className="text-sm font-medium text-gray-900">Ingredients</h3>
+                                <div className="mt-4">
+                                    <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                                        {tea?.ingredients &&
+                                            tea?.ingredients.split(',').map((ingredient, index) => (
+                                                <li key={index} className="text-gray-400">
+                                                    <span className="text-gray-600">{ingredient.trim()}</span>
+                                                </li>
+                                            ))}
+                                    </ul>
+                                </div>
+                            </div>
 
-                            <div className="mt-4">
-                                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                                    {tea?.ingredients && tea?.ingredients.split(',').map((ingredient, index) => (
-                                        <li key={index} className="text-gray-400">
-                                            <span className="text-gray-600">{ingredient.trim()}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <div className="mt-10">
+                                <h2 className="text-sm font-medium text-gray-900">Origin</h2>
+
+                                <div className="mt-4 space-y-6 flex gap-16">
+                                    <p className="text-sm text-gray-600">{tea?.tea_origin.name}</p>
+                                    <img
+                                        src={`http://teaeirro.com/upload/${tea?.tea_origin.name}.svg`}
+                                        alt={tea?.tea_origin.name}
+                                        className="w-36"
+                                    />
+                                </div>
                             </div>
                         </div>
-
-                        <div className="mt-10">
-                            <h2 className="text-sm font-medium text-gray-900">Origin</h2>
-
-                            <div className="mt-4 space-y-6 flex gap-16">
-                                <p className="text-sm text-gray-600">{tea?.tea_origin.name}</p>
-                                <img
-                                    src={`http://teaeirro.com/upload/${tea?.tea_origin.name}.svg`}
-                                    alt={tea?.tea_origin.name}
-                                    className="w-36"
-                                />
-                            </div>
-                        </div>
-                        </div>
-
                     </div>
                 </div>
             </div>

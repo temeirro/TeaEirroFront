@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Image, Select, Modal, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
+import {
+    PencilSquareIcon,
+    TrashIcon,
+    MagnifyingGlassCircleIcon
+} from '@heroicons/react/24/outline'
 const TeaPage = ({ onSelectPage }) => {
     const [teaList, setTeaList] = useState([]);
     const [filteredTeaList, setFilteredTeaList] = useState([]);
@@ -120,6 +124,8 @@ const TeaPage = ({ onSelectPage }) => {
             dataIndex: 'id', // Assuming 'id' is the key for Tea ID in your data
             key: 'id',
             sorter: (a, b) => a.id - b.id,
+            defaultSortOrder: 'ascend', // Set the default sort order to ascend
+
         },
         {
             title: 'Image',
@@ -154,12 +160,14 @@ const TeaPage = ({ onSelectPage }) => {
             dataIndex: 'actions',
             key: 'actions',
             render: (_, record) => (
-                <span>
-                    <Button onClick={() => handleEdit(record.id)}>Edit</Button>
-                    <Button onClick={() => handleDetails(record.id)} style={{ marginLeft: 8 }}>
+                <span className={'flex'}>
+                    <Button className="flex items-center gap-x-1 text-sm " onClick={() => handleEdit(record.id)}><PencilSquareIcon className="h-5 w-5 flex-none text-gray-400"/>Edit</Button>
+                    <Button className="flex items-center gap-x-1 text-sm " onClick={() => handleDetails(record.id)} style={{ marginLeft: 8 }}>
+                       <MagnifyingGlassCircleIcon className="h-5 w-5 flex-none text-gray-400"/>
                         Details
                     </Button>
-                    <Button onClick={() => showDeleteModal(record.id)} style={{ marginLeft: 8 }}>
+                    <Button className="flex items-center gap-x-1 text-sm " onClick={() => showDeleteModal(record.id)} style={{ marginLeft: 8 }}>
+                        <TrashIcon className="h-5 w-5 flex-none text-gray-400"/>
                         Delete
                     </Button>
                 </span>

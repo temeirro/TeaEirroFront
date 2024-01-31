@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Form, Input, message, Modal, Row, Upload } from "antd";
 import type { UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
 import axios from "axios";
-import { IRegisterForm, IRegister, IUserLoginInfo, IUser } from "../authmodels.ts";
+import {IRegisterForm, IRegister, IUserLoginInfo, IUser, IRegisterGoogle} from "../authmodels.ts";
 import { jwtDecode } from "jwt-decode";
 import {imageConverter, IUploadedFile} from "./imageconvert.ts";
 import { useNavigate } from "react-router-dom";
@@ -39,21 +39,51 @@ const RegisterPage = () => {
         console.log("Google Sign-In Success", response);
 
         // Extract relevant information from the response
-        const { givenName, familyName, email, imageUrl } = response.profileObj;
+        const { givenName, familyName, email, imageUrl, googleId } = response.profileObj;
 
 
+        const data: IRegisterGoogle = {name: givenName, lastName: familyName, email:email,image:imageUrl,googleId:googleId,  role: "user", };
+        console.log("Registration data", data);
+
+        try {
+            // Register user
+            await axios.post("http://teaeirro.com/api/registerGoogle", data);
+
+            // Login user
+            const loginData = {
+                email: email, // Assuming email is a field in your IRegisterForm interface
+                googleId: googleId, // Assuming password is a field in your IRegisterForm interface
+            };
+
+            const login = await axios.post("http://teaeirro.com/api/loginGoogle", loginData);
+            console.log("Login data", login.data);
+
+            const { token } = login.data;
+            const user: IUserLoginInfo = jwtDecode<IUserLoginInfo>(token);
+            console.log("User info", user);
+
+            localStorage.token = token;
+            const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
+
+            dispatch({
+                type: AuthReducerActionType.LOGIN_USER,
+                payload: {
+                    email: user.email,
+                    image: imagename.data.image_name,
+                    name: user.name,
+                    lastName: user.lastName,
+                } as IUser,
+            });
+
+            success();
+            onClear();
 
 
+            navigator("/");
 
-        // Set form values with the extracted data
-        form.setFieldsValue({
-            name: givenName,
-            lastName: familyName,
-            email: email,
-            image: imageUrl
-        });
-
-
+        } catch (error) {
+            console.error("Registration failed", error);
+        }
     };
 
     const handleGoogleFailure = (error) => {
@@ -65,23 +95,9 @@ const RegisterPage = () => {
     const handleChange: UploadProps["onChange"] = ({ fileList: newFile }) => {
         const newFileList = newFile.slice(-1);
         setFile(newFileList[0]);
-
-        // Use the imageConverter function to get the file
-        const uploadedFile = imageConverter({ fileList: newFileList }) as IUploadedFile;
-
-        // Check if the uploaded file is an image, and if not, treat it as a URL
-        if (uploadedFile?.originFileObj instanceof File) {
-            // If it's a file, set the URL to the preview URL
-            form.setFieldsValue({
-                image: uploadedFile.thumbUrl || uploadedFile.url,
-            });
-        } else {
-            // If it's a URL, set the URL directly
-            form.setFieldsValue({
-                image: uploadedFile.url,
-            });
-        }
     };
+
+
 
     const handlePreview = async (file: UploadFile) => {
         if (!file.url && !file.preview) {
@@ -102,7 +118,7 @@ const RegisterPage = () => {
     const onFinish = async (values: IRegisterForm) => {
         const data: IRegister = { ...values, role: "user", image: values.image?.thumbUrl };
         console.log("Registration data", data);
-
+        console.log(values);
         try {
             // Register user
             await axios.post("http://teaeirro.com/api/register", data);
@@ -136,24 +152,11 @@ const RegisterPage = () => {
             success();
             onClear();
 
-            if (user.email === "art.rozhyk@gmail.com") {
-                dispatch({
-                    type: AuthReducerActionType.LOGIN_ADMIN,
-                    payload: {
-                        email: user.email,
-                        image: imagename.data.image_name,
-                        name: user.name,
-                        lastName: user.lastName,
-                    } as IUser,
-                });
 
-                navigator("/admin");
-            } else {
                 navigator("/");
-            }
+
         } catch (error) {
             console.error("Registration failed", error);
-            error();
         }
     };
 
@@ -183,16 +186,30 @@ const RegisterPage = () => {
     };
 
     return (
+        <div className="container mx-auto mt-8">
+            <div
+                className="absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-3xl  "
+                aria-hidden="true"
+                style={{ zIndex: -1 }} // Ensure the background is behind the header
+            >
+                <div
+                    className="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#1a08bf] to-[#000000] opacity-50 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
+                    style={{
+                        clipPath:
+                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                    }}
+                />
+            </div>
         <Row className="mt-5" justify="center">
             <Col
                 span={24}
                 md={16}
                 lg={12}
                 xl={8}
-                className="text-center p-8 rounded shadow bg-white"
+                className="text-center p-8  shadow bg-white"
             >
                 {contextHolder}
-                <Divider>Registration</Divider>
+                <Divider className="text-black"><h1>SIGN UP</h1></Divider>
                 <Form
                     form={form}
                     onFinish={onFinish}
@@ -248,8 +265,8 @@ const RegisterPage = () => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Your Photo"
-                        name="image"
+                        label="Your photo"
+                        name={"image"}
                         getValueFromEvent={imageConverter}
                     >
                         <Upload
@@ -260,14 +277,16 @@ const RegisterPage = () => {
                             onPreview={handlePreview}
                             accept="image/*"
                         >
-                            {file ? null : (
-                                <div>
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>choose</div>
-                                </div>
-                            )}
+                            {file ? null :
+                                (
+                                    <div>
+                                        <PlusOutlined/>
+                                        <div style={{marginTop: 8}}>Upload</div>
+                                    </div>)
+                            }
                         </Upload>
                     </Form.Item>
+
 
                     <Form.Item
                         name="password"
@@ -353,6 +372,7 @@ const RegisterPage = () => {
                 </Form>
             </Col>
         </Row>
+        </div>
     );
 };
 

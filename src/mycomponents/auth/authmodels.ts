@@ -22,8 +22,22 @@ export interface IRegister {
     role:string;
 }
 
+export interface IRegisterGoogle{
+    name: string;
+    lastName: string;
+    image: string | undefined;
+    email: string;
+    role:string;
+    googleId:string;
+}
+
 export interface ILoginResult {
     token: string
+}
+
+export interface ILoginGoogle {
+    email: string,
+    googleId: string,
 }
 
 export interface IUserLoginInfo {

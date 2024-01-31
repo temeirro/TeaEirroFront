@@ -12,6 +12,11 @@ import TeaDetails from "./mycomponents/tea_pages/TeaDetails.tsx";
 import AddTeaPage from "./mycomponents/admin/AddTeaPage.tsx";
 import EditTeaPage from "./mycomponents/admin/EditTeaPage.tsx";
 import PhilosophyPage from "./mycomponents/header_pages/PhilosophyPage.tsx";
+import Contacts from './mycomponents/header_pages/Contacts.tsx';
+import CulturePage from './mycomponents/header_pages/CulturePage.tsx';
+import CartPage from "./mycomponents/tea_pages/CartPage.tsx";
+import DefaultFooter from './mycomponents/containers/DefaultFooter.tsx';
+import ProfilePage from './mycomponents/header_pages/ProfilePage.tsx';
 
 
 function App() {
@@ -32,8 +37,13 @@ function App() {
             <Route path="editTea/:Id" element={<EditTeaPage/>}/>
 
             <Route path="phil" element={<PhilosophyPage/>}/>
+            <Route path="contacts" element={<Contacts/>}/>
+            <Route path="culture" element={<CulturePage/>}/>
+            <Route path="cart" element={<CartPage/>}/>
+            <Route path="profile" element={<ProfilePage/>}/>
 
         </Routes>
+        <DefaultFooter/>
 
 
     </>
