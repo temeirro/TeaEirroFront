@@ -23,7 +23,7 @@ export default function Example() {
 
     const { type } = useParams();
 
-    const apiUrl = `http://teaeirro.com/api/get${type}Tea`;
+    const apiUrl = `//teaeirro.com/api/get${type}Tea`;
 
     useEffect(() => {
         axios
