@@ -35,12 +35,12 @@ const LoginPage = () => {
 
 
         try {
-            const resp = await axios.post<ILoginResult>("http://teaeirro.com/api/loginGoogle", data);
+            const resp = await axios.post<ILoginResult>("https://tealaravel.azurewebsites.net/api/loginGoogle", data);
             const { token } = resp.data;
             localStorage.token = token;
 
             const user = jwtDecode(token) as IUser;
-            const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
+            const imagename = await axios.get(`https://tealaravel.azurewebsites.net/api/getImage?email=` + user.email);
 
             dispatch({
                 type: AuthReducerActionType.LOGIN_USER,
@@ -73,12 +73,12 @@ const LoginPage = () => {
 
     const onFinish = async (values: ILogin) => {
         try {
-            const resp = await axios.post<ILoginResult>("http://teaeirro.com/api/login", values);
+            const resp = await axios.post<ILoginResult>("https://tealaravel.azurewebsites.net/api/login", values);
             const { token } = resp.data;
             localStorage.token = token;
 
             const user = jwtDecode(token) as IUser;
-            const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
+            const imagename = await axios.get(`https://tealaravel.azurewebsites.net/api/getImage?email=` + user.email);
 
             dispatch({
                 type: AuthReducerActionType.LOGIN_USER,

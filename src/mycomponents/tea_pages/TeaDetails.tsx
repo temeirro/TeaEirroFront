@@ -252,7 +252,7 @@ export default function Example() {
                                 <div className="mt-4 space-y-6 flex gap-16">
                                     <p className="text-sm text-gray-600">{tea?.["tea_origin"]?.["name"]}</p>
                                     <img
-                                        src={`http://teaeirro.com/upload/${tea?.["tea_origin"]?.["name"]}.svg`}
+                                        src={`https://tealaravel.azurewebsites.net/upload/${tea?.["tea_origin"]?.["name"]}.svg`}
                                         alt={tea?.["tea_origin"]?.["name"]}
                                         className="w-36"
                                     />

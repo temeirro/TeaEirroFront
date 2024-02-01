@@ -47,7 +47,7 @@ const RegisterPage = () => {
 
         try {
             // Register user
-            await axios.post("http://teaeirro.com/api/registerGoogle", data);
+            await axios.post("https://tealaravel.azurewebsites.net/api/registerGoogle", data);
 
             // Login user
             const loginData = {
@@ -55,7 +55,7 @@ const RegisterPage = () => {
                 googleId: googleId, // Assuming password is a field in your IRegisterForm interface
             };
 
-            const login = await axios.post("http://teaeirro.com/api/loginGoogle", loginData);
+            const login = await axios.post("https://tealaravel.azurewebsites.net/api/loginGoogle", loginData);
             console.log("Login data", login.data);
 
             const { token } = login.data;
@@ -63,7 +63,7 @@ const RegisterPage = () => {
             console.log("User info", user);
 
             localStorage.token = token;
-            const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
+            const imagename = await axios.get(`https://tealaravel.azurewebsites.net/api/getImage?email=` + user.email);
 
             dispatch({
                 type: AuthReducerActionType.LOGIN_USER,
@@ -121,7 +121,7 @@ const RegisterPage = () => {
         console.log(values);
         try {
             // Register user
-            await axios.post("http://teaeirro.com/api/register", data);
+            await axios.post("https://tealaravel.azurewebsites.net/api/register", data);
 
             // Login user
             const loginData = {
@@ -129,7 +129,7 @@ const RegisterPage = () => {
                 password: values.password, // Assuming password is a field in your IRegisterForm interface
             };
 
-            const login = await axios.post("http://teaeirro.com/api/login", loginData);
+            const login = await axios.post("https://tealaravel.azurewebsites.net/api/login", loginData);
             console.log("Login data", login.data);
 
             const { token } = login.data;
@@ -137,7 +137,7 @@ const RegisterPage = () => {
             console.log("User info", user);
 
             localStorage.token = token;
-            const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
+            const imagename = await axios.get(`https://tealaravel.azurewebsites.net/api/getImage?email=` + user.email);
 
             dispatch({
                 type: AuthReducerActionType.LOGIN_USER,

@@ -13,7 +13,7 @@ import { addToCart } from './mycomponents/tea_pages/CartActions.ts';
 
 if (localStorage.token) {
     const user = jwtDecode(localStorage.token) as IUser;
-    const imagename = await axios.get(`http://teaeirro.com/api/getImage?email=` + user.email);
+    const imagename = await axios.get(`https://tealaravel.azurewebsites.net/api/getImage?email=` + user.email);
 
     store.dispatch({
         type: AuthReducerActionType.LOGIN_USER,

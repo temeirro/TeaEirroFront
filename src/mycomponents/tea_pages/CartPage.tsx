@@ -61,7 +61,7 @@ export default function Example() {
                             <div key={product.id} className="group relative">
                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-50 transition-opacity duration-300 lg:h-80">
                                     <img
-                                        src={`http://teaeirro.com/upload/${product.image}`}
+                                        src={`https://tealaravel.azurewebsites.net/upload/${product.image}`}
                                         alt={product.name}
                                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                     />

@@ -23,7 +23,7 @@ export default function Example() {
 
     const { type } = useParams();
 
-    const apiUrl = `//teaeirro.com/api/get${type}Tea`;
+    const apiUrl = `https://tealaravel.azurewebsites.net/api/get${type}Tea`;
 
     useEffect(() => {
         axios
@@ -36,7 +36,7 @@ export default function Example() {
             });
 
         axios
-            .get('http://teaeirro.com/api/getAllTeaOrigins')
+            .get('https://tealaravel.azurewebsites.net/api/getAllTeaOrigins')
             .then((response) => setOrigins(response.data))
             .catch((error) => console.error('Error fetching tea origins:', error));
     }, [apiUrl]);
@@ -173,7 +173,7 @@ src={image}
                             <div key={product?.["id"]} className="group relative">
                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-50 transition-opacity duration-300 lg:h-80">
                                     <img
-                                        src={`http://teaeirro.com/upload/${product?.["tea_images"]?.[0]?.["name"]}`}
+                                        src={`https://tealaravel.azurewebsites.net/upload/${product?.["tea_images"]?.[0]?.["name"]}`}
                                         alt={product?.["name"]}
                                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                     />
