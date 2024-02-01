@@ -49,7 +49,7 @@ export default function Example() {
         const { Id } = useParams();
         const [tea, setTea] = useState();
 
-        const apiUrl = 'http://teaeirro.com/api/getTea/' + Id;
+        const apiUrl = 'https://tealaravel.azurewebsites.net/api/getTea/' + Id;
 
         useEffect(() => {
             axios
@@ -143,7 +143,7 @@ export default function Example() {
                     {tea?.["tea_images"]?.map((image, index) => (
                         <div key={index} className={`aspect-h-2 aspect-w-3 overflow-hidden rounded-lgS`}>
                             <Image
-                                src={`http://teaeirro.com/upload/${image?.name}`}
+                                src={`https://tealaravel.azurewebsites.net/upload/${image?.name}`}
                                 alt={image?.alt}
                                 className="h-full w-full object-cover object-center"
                             />
@@ -151,7 +151,7 @@ export default function Example() {
                     ))}
 
                     <Image
-                        src={`http://teaeirro.com/upload/${tea?.["tea_type"]?.["name"]}.jpg`}
+                        src={`https://tealaravel.azurewebsites.net/upload/${tea?.["tea_type"]?.["name"]}.jpg`}
                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                     />
                 </div>

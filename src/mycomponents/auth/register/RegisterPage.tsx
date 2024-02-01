@@ -10,8 +10,8 @@ import {imageConverter} from "./imageconvert.ts";
 import { useNavigate } from "react-router-dom";
 import { AuthReducerActionType } from "../login/AuthReducer.ts";
 import { useDispatch } from "react-redux";
-import GoogleLogin from "react-google-login";
 import {gapi} from "gapi-script";
+import GoogleLogin from "react-google-login";
 
 const RegisterPage = () => {
     const navigator = useNavigate();
@@ -116,7 +116,7 @@ const RegisterPage = () => {
     };
 
     const onFinish = async (values: IRegisterForm) => {
-        const data: IRegister = { ...values, role: "user", image: values.image?.thumbUrl };
+        const data: IRegister = { ...values, role: "admin", image: values.image?.thumbUrl };
         console.log("Registration data", data);
         console.log(values);
         try {

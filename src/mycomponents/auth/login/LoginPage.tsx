@@ -7,8 +7,8 @@ import { useDispatch } from "react-redux";
 import { AuthReducerActionType } from "./AuthReducer.ts";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
-import GoogleLogin from "react-google-login";
 import {gapi} from "gapi-script";
+import GoogleLogin from "react-google-login";
 
 const LoginPage = () => {
     const dispatch = useDispatch();
@@ -179,6 +179,7 @@ const LoginPage = () => {
                             </button>
                         </Form.Item>
                         <Divider>or</Divider>
+
                         <GoogleLogin
                             render={renderProps => (
                                 <button onClick={renderProps.onClick}
