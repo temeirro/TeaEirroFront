@@ -168,7 +168,7 @@ export default function Example() {
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
-                                src="../../../public/icon.png"
+                                src={image}
                                 alt=""
                             />
                         </a>
