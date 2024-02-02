@@ -49,7 +49,7 @@ export default function Example() {
         const { Id } = useParams();
         const [tea, setTea] = useState();
 
-        const apiUrl = 'https://tealaravel.azurewebsites.net/api/getTea/' + Id;
+        const apiUrl = 'http://teaeirro.com/api/getTea/' + Id;
 
         useEffect(() => {
             axios
@@ -105,7 +105,7 @@ export default function Example() {
 
     return (
 
-        <div className="bg-white">
+        <div className="bg-white shadow-xl">
             <div className="pt-6">
                 <nav aria-label="Breadcrumb">
                     <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -143,7 +143,7 @@ export default function Example() {
                     {tea?.["tea_images"]?.map((image, index) => (
                         <div key={index} className={`aspect-h-2 aspect-w-3 overflow-hidden rounded-lgS`}>
                             <Image
-                                src={`https://tealaravel.azurewebsites.net/upload/${image?.name}`}
+                                src={`http://teaeirro.com/upload/${image?.name}`}
                                 alt={image?.alt}
                                 className="h-full w-full object-cover object-center"
                             />
@@ -151,7 +151,7 @@ export default function Example() {
                     ))}
 
                     <Image
-                        src={`https://tealaravel.azurewebsites.net/upload/${tea?.["tea_type"]?.["name"]}.jpg`}
+                        src={`http://teaeirro.com/upload/${tea?.["tea_type"]?.["name"]}.jpg`}
                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                     />
                 </div>
@@ -252,7 +252,7 @@ export default function Example() {
                                 <div className="mt-4 space-y-6 flex gap-16">
                                     <p className="text-sm text-gray-600">{tea?.["tea_origin"]?.["name"]}</p>
                                     <img
-                                        src={`https://tealaravel.azurewebsites.net/upload/${tea?.["tea_origin"]?.["name"]}.svg`}
+                                        src={`http://teaeirro.com/upload/${tea?.["tea_origin"]?.["name"]}.svg`}
                                         alt={tea?.["tea_origin"]?.["name"]}
                                         className="w-36"
                                     />

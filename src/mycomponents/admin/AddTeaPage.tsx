@@ -15,7 +15,7 @@ const AddTeaPage = () => {
     useEffect(() => {
         const fetchTeaTypes = async () => {
             try {
-                const response = await axios.get("https://tealaravel.azurewebsites.net/api/getAllTeaTypes");
+                const response = await axios.get("http://teaeirro.com/api/getAllTeaTypes");
                 setTeaTypes(response.data); // Assuming the API response contains an array of tea types
             } catch (error) {
                 console.error("Error fetching tea types:", error);
@@ -24,7 +24,7 @@ const AddTeaPage = () => {
 
         const fetchTeaOrigins = async () => {
             try {
-                const response = await axios.get("https://tealaravel.azurewebsites.net/api/getAllTeaOrigins");
+                const response = await axios.get("http://teaeirro.com/api/getAllTeaOrigins");
                 setTeaOrigins(response.data); // Assuming the API response contains an array of tea origins
             } catch (error) {
                 console.error("Error fetching tea origins:", error);
@@ -52,7 +52,7 @@ const AddTeaPage = () => {
                 formData.append(`images[${index}]`, image.originFileObj);
             });
 
-            const response = await axios.post("https://tealaravel.azurewebsites.net/api/addTea", formData, {
+            const response = await axios.post("http://teaeirro.com/api/addTea", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

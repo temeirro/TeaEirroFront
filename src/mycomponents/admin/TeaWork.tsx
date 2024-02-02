@@ -19,7 +19,7 @@ const TeaPage = ({ onSelectPage }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('https://tealaravel.azurewebsites.net/api/getAllTea')
+        fetch('http://teaeirro.com/api/getAllTea')
             .then(response => response.json())
             .then(data => {
                 setTeaList(data);
@@ -27,12 +27,12 @@ const TeaPage = ({ onSelectPage }) => {
             })
             .catch(error => console.error('Error fetching tea data:', error));
 
-        fetch('https://tealaravel.azurewebsites.net/api/getAllTeaTypes')
+        fetch('http://teaeirro.com/api/getAllTeaTypes')
             .then(response => response.json())
             .then(data => setTeaTypes(data))
             .catch(error => console.error('Error fetching tea types:', error));
 
-        fetch('https://tealaravel.azurewebsites.net/api/getAllTeaOrigins')
+        fetch('http://teaeirro.com/api/getAllTeaOrigins')
             .then(response => response.json())
             .then(data => setTeaOrigins(data))
             .catch(error => console.error('Error fetching tea origins:', error));
@@ -65,7 +65,7 @@ const TeaPage = ({ onSelectPage }) => {
 
     const deleteTea = async (teaId) => {
         try {
-            const response = await fetch(`https://tealaravel.azurewebsites.net/api/deleteTea/${teaId}`, {
+            const response = await fetch(`http://teaeirro.com/api/deleteTea/${teaId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ const TeaPage = ({ onSelectPage }) => {
             key: 'tea_images',
             render: (teaImages) => (
                 <Image
-                    src={teaImages.length > 0 ? 'https://tealaravel.azurewebsites.net/upload/' + teaImages[0].name : ''}
+                    src={teaImages.length > 0 ? 'http://teaeirro.com/upload/' + teaImages[0].name : ''}
                     alt="Tea"
                     width={50}
                 />

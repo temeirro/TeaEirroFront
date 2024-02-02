@@ -22,13 +22,13 @@ const EditTeaPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const teaResponse = await axios.get(`https://tealaravel.azurewebsites.net/api/getTea/${Id}`);
+                const teaResponse = await axios.get(`http://teaeirro.com/api/getTea/${Id}`);
                 setTea(teaResponse.data);
                 console.log(teaResponse.data);
-                const typesResponse = await axios.get("https://tealaravel.azurewebsites.net/api/getAllTeaTypes");
+                const typesResponse = await axios.get("http://teaeirro.com/api/getAllTeaTypes");
                 setTeaTypes(typesResponse.data);
 
-                const originsResponse = await axios.get("https://tealaravel.azurewebsites.net/api/getAllTeaOrigins");
+                const originsResponse = await axios.get("http://teaeirro.com/api/getAllTeaOrigins");
                 setTeaOrigins(originsResponse.data);
 
                 form.setFieldsValue({
@@ -38,7 +38,7 @@ const EditTeaPage = () => {
                     price: parseFloat(teaResponse.data.price),
                     origin: teaResponse.data.origin_id,
                     type: teaResponse.data.type_id,
-                    images: teaResponse.data.tea_images.map(image => ({ url: 'https://tealaravel.azurewebsites.net/upload/' + image.name, name: image.name }))
+                    images: teaResponse.data.tea_images.map(image => ({ url: 'http://teaeirro.com/upload/' + image.name, name: image.name }))
 
                 });
             } catch (error) {
@@ -55,7 +55,7 @@ const EditTeaPage = () => {
             formData.append("image", file);
             console.log(formData);
             // Make the POST request to add the image
-            const response = await axios.post(`https://tealaravel.azurewebsites.net/api/addTeaImage/${Id}`, formData, {
+            const response = await axios.post(`http://teaeirro.com/api/addTeaImage/${Id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -71,7 +71,7 @@ const EditTeaPage = () => {
     const handleDeleteImage = async (name : any) => {
         try {
             // Make the DELETE request to delete the image
-            const response = await axios.delete(`https://tealaravel.azurewebsites.net/api/deleteTeaImage/${Id}/${name}`);
+            const response = await axios.delete(`http://teaeirro.com/api/deleteTeaImage/${Id}/${name}`);
 
             console.log("Image deleted successfully:", response.data);
         } catch (error) {
@@ -90,7 +90,7 @@ const EditTeaPage = () => {
             formData.append("origin_id", values.origin);
 
             // Make the POST request without handling images
-            const response = await axios.post(`https://tealaravel.azurewebsites.net/api/editTeaWithoutImages/${Id}`, formData, {
+            const response = await axios.post(`http://teaeirro.com/api/editTeaWithoutImages/${Id}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
